@@ -42,9 +42,7 @@ function HeroCarousel() {
                         <div className="hero-content">
                             <h1>{banner.title}</h1>
                             <p>{banner.subtitle}</p>
-                            <button >
-                                <a href={"/products"} style={{ textDecoration: "none", color: "inherit" }}>{banner.buttonText}</a>
-                                </button>
+                            
                         </div>
 
                         <div className="hero-image">
