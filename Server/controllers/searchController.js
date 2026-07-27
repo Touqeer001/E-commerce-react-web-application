@@ -1,4 +1,4 @@
-import products from "../data/products.js";
+// import products from "../data/products.js";
 
 export const globalSearch = (req, res) => {
   const query = req.query.q?.trim().toLowerCase();

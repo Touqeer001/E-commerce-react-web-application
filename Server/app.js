@@ -10,6 +10,7 @@ import orderRoutes from "./routes/orderRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import megaMenuRoutes from "./routes/megaMenuRoutes.js";
 import searchRoutes from "./routes/searchRoutes.js";
+import pool from "./config/db.js";
 
 
 
@@ -19,6 +20,15 @@ import searchRoutes from "./routes/searchRoutes.js";
 // });
 dotenv.config();
 
+
+
+try {
+  const connection = await pool.getConnection();
+  console.log("✅ MySQL Connected Successfully");
+  connection.release();
+} catch (error) {
+  console.error("❌ MySQL Connection Failed:", error.message);
+}
 
 
 console.log("Merchant ID:", process.env.BRAINTREE_MERCHANT_ID);
@@ -68,6 +78,10 @@ app.get("/", (req, res) => {
     message: "Server is running successfully ",
   });
 });
+
+
+
+
 
 
 export default app;

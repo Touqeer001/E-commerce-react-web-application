@@ -9,9 +9,9 @@ import {
 /**
  * GET /cart
  */
-export const getCart = (req, res) => {
+export const getCart = async (req, res) => {
   try {
-    const cart = getCartSummary();
+    const cart = await getCartSummary();
 
     res.status(200).json({
       success: true,
@@ -29,9 +29,13 @@ export const getCart = (req, res) => {
 /**
  * POST /cart
  */
-export const createCartItem = (req, res) => {
+export const createCartItem = async (req, res) => {
   try {
-    const cartItem = addToCart(req.body);
+    console.log("Request Body:", req.body);
+
+    const cartItem = await addToCart(req.body);
+
+    console.log("Cart Item:", cartItem);
 
     res.status(201).json({
       success: true,
@@ -39,6 +43,8 @@ export const createCartItem = (req, res) => {
       data: cartItem,
     });
   } catch (error) {
+    console.error(error);
+
     res.status(400).json({
       success: false,
       message: error.message,
@@ -49,12 +55,12 @@ export const createCartItem = (req, res) => {
 /**
  * PUT /cart/:cartId
  */
-export const updateCartItem = (req, res) => {
+export const updateCartItem = async (req, res) => {
   try {
     const { cartId } = req.params;
     const { quantity } = req.body;
 
-    const updatedItem = updateQuantity(cartId, quantity);
+    const updatedItem = await updateQuantity(cartId, quantity);
 
     res.status(200).json({
       success: true,
@@ -72,11 +78,11 @@ export const updateCartItem = (req, res) => {
 /**
  * DELETE /cart/:cartId
  */
-export const deleteCartItem = (req, res) => {
+export const deleteCartItem = async (req, res) => {
   try {
     const { cartId } = req.params;
 
-    removeItem(cartId);
+    await removeItem(cartId);
 
     res.status(200).json({
       success: true,
@@ -93,9 +99,9 @@ export const deleteCartItem = (req, res) => {
 /**
  * DELETE /cart
  */
-export const deleteCart = (req, res) => {
+export const deleteCart = async (req, res) => {
   try {
-    clearCart();
+    await clearCart();
 
     res.status(200).json({
       success: true,

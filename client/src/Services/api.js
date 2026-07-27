@@ -14,11 +14,11 @@ const mockApi = axios.create({
 });
 
 
-export const getAllProducts = () => mockApi.get("/products");
+export const getAllProducts = () => api.get("/products");
 
-export const getProductById = (id) => mockApi.get(`/products/${id}`);
+export const getProductById = (id) => api.get(`/products/${id}`);
 
-export const getAllBanners = () => mockApi.get("/banners");
+export const getAllBanners = () => api.get("/banners");
 export const getAllCategories = () => mockApi.get("/categories");
 
 export const getCurrentUser = () => api.get("/auth/me");

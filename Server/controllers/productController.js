@@ -1,48 +1,113 @@
-import products from "../data/products.js";
+// import products from "../data/products.js";
+import db from "../config/db.js";
 
-// Get All Products
 export const getAllProducts = async (req, res) => {
-    try {
-        res.status(200).json({
-            success: true,
-            message: "Products fetched successfully",
-            total: products.length,
-            products
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "Something went wrong",
-            error: error.message
-        });
+  try {
+    const [products] = await db.query(`
+      SELECT
+        p.id,
+        p.name,
+        p.description,
+        p.price,
+        p.rating,
+        p.stock,
+        p.sub_category AS subCategory,
+        p.age_group AS ageGroup,
+        c.name AS category
+      FROM products p
+      LEFT JOIN categories c
+      ON p.category_id = c.id
+    `);
+
+    for (const product of products) {
+      const [images] = await db.query(
+        `SELECT image_url FROM product_images WHERE product_id=?`,
+        [product.id]
+      );
+
+      const [sizes] = await db.query(
+        `SELECT size FROM product_sizes WHERE product_id=?`,
+        [product.id]
+      );
+
+      const [colors] = await db.query(
+        `SELECT color FROM product_colors WHERE product_id=?`,
+        [product.id]
+      );
+
+      product.images = images.map((img) => img.image_url);
+      product.size = sizes.map((s) => s.size);
+      product.colors = colors.map((c) => c.color);
     }
+
+    res.json({
+      success: true,
+      products,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
 };
 
 // Get Product By ID
+// export const getProductById = async (req, res) => {
+//     try {
+//         const id = Number(req.params.id);
+
+//         const product = products.find((item) => item.id === id);
+
+//         if (!product) {
+//             return res.status(404).json({
+//                 success: false,
+//                 message: "Product not found"
+//             });
+//         }
+
+//         res.status(200).json({
+//             success: true,
+//             product
+//         });
+//     } catch (error) {
+//         res.status(500).json({
+//             success: false,
+//             message: "Something went wrong",
+//             error: error.message
+//         });
+//     }
+// };
+
 export const getProductById = async (req, res) => {
-    try {
-        const id = Number(req.params.id);
+  try {
+    const { id } = req.params;
 
-        const product = products.find((item) => item.id === id);
+    const [rows] = await db.query(
+      `
+      SELECT
+        p.*,
+        c.name AS category
+      FROM products p
+      LEFT JOIN categories c
+      ON p.category_id=c.id
+      WHERE p.id=?
+      `,
+      [id]
+    );
 
-        if (!product) {
-            return res.status(404).json({
-                success: false,
-                message: "Product not found"
-            });
-        }
-
-        res.status(200).json({
-            success: true,
-            product
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: "Something went wrong",
-            error: error.message
-        });
+    if (rows.length === 0) {
+      return res.status(404).json({
+        message: "Product not found",
+      });
     }
+
+    res.json(rows[0]);
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+    });
+  }
 };
 
 
