@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { FaShoppingCart } from "react-icons/fa";
+import { FaHeart, FaShoppingCart } from "react-icons/fa";
 import "./ProductInfo.css";
 import useCart from "../../../hooks/useCart";
+import useWishlist from "../../../hooks/useWishlist";
 
 const ProductInfo = ({ product }) => {
   const [selectedSize, setSelectedSize] = useState(
@@ -13,6 +14,7 @@ const ProductInfo = ({ product }) => {
   );
 
   const { addToCart, actionLoading } = useCart();
+  const { addItem, wishlist, actionLoading: wishlistLoading } = useWishlist();
 
   if (!product) return null;
 
@@ -34,6 +36,7 @@ const ProductInfo = ({ product }) => {
       color: product.color,
     });
   };
+  const isWishlisted = wishlist.items.some((item) => String(item.productId) === String(product.id));
 
   const discount =
     product.oldPrice &&
@@ -161,6 +164,9 @@ const ProductInfo = ({ product }) => {
       >
         <FaShoppingCart />
         {actionLoading ? "ADDING..." : "ADD TO CART"}
+      </button>
+      <button className="cart-button wishlist-product-button" onClick={() => !isWishlisted && addItem(product)} disabled={wishlistLoading || isWishlisted} type="button">
+        <FaHeart /> {isWishlisted ? "SAVED TO WISHLIST" : "ADD TO WISHLIST"}
       </button>
 
       {/* Accordions */}

@@ -7,8 +7,11 @@ import { Navigation } from "swiper/modules";
 
 import "swiper/css";
 import "swiper/css/navigation";
+import useWishlist from "../../hooks/useWishlist";
 
 const ProductListCard = ({ product }) => {
+  const { addItem, wishlist, actionLoading } = useWishlist();
+  const isWishlisted = wishlist.items.some((item) => String(item.productId) === String(product.id));
   const discount =
     product.discountPrice && product.discountPrice > product.price
       ? Math.round(
@@ -44,7 +47,7 @@ const ProductListCard = ({ product }) => {
           </Swiper>
         </Link>
 
-        <button className="wishlist-btn">
+        <button className={`wishlist-btn ${isWishlisted ? "active" : ""}`} onClick={() => !isWishlisted && addItem(product)} disabled={actionLoading || isWishlisted} aria-label={isWishlisted ? "In wishlist" : "Add to wishlist"}>
           <FaHeart />
         </button>
 

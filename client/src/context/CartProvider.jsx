@@ -68,12 +68,14 @@ const CartProvider = ({ children }) => {
       toast.success(
         response?.data?.message || "Product added to cart."
       );
+      return true;
     } catch (err) {
       console.error(err);
 
       toast.error(
         err.response?.data?.message || "Failed to add product."
       );
+      return false;
     } finally {
       addToCartLockRef.current = null;
       setActionLoading(false);

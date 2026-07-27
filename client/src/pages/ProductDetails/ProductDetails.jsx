@@ -4,7 +4,7 @@ import { useLocation, useParams } from "react-router-dom";
 import "./ProductDetails.css";
 
 import Breadcrumb from "../../components/Breadcrumb/Breadcrumb";
-import { getProductById } from "../../Services/api";
+import { getLocalProductById, getProductById } from "../../Services/api";
 import ProductGallery from "../../components/productDetailpage/ProductGallery/ProductGallery";
 import ProductInfo from "../../components/productDetailpage/ProductInfo/ProductInfo";
 import ProductCarousel from "../../components/ProductCarousel/ProductCarousel";
@@ -32,13 +32,18 @@ const ProductDetails = () => {
 
       try {
         const response = await getProductById(id);
-
-        // Supports both the MockAPI response (the product directly) and the
-        // local API response ({ success, product }) for direct page visits.
         setProduct(response.data.product ?? response.data);
-      } catch (error) {
-        console.error("Error fetching product:", error);
-        setProduct(null);
+      } catch (mockApiError) {
+        // Wishlist IDs come from the local mock backend, just like Cart. If a
+        // matching product is not present in the external MockAPI, load the
+        // local product instead so its PDP remains available.
+        try {
+          const response = await getLocalProductById(id);
+          setProduct(response.data.product ?? response.data);
+        } catch (localApiError) {
+          console.error("Error fetching product:", mockApiError, localApiError);
+          setProduct(null);
+        }
       } finally {
         setLoading(false);
       }

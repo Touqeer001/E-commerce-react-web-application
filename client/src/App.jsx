@@ -19,6 +19,7 @@ import  ReturnsExchangePolicy from "./pages/ReturnsExchangePolicy"
 import TermsConditions from "./pages/TermsConditions"
 import ContactUs from "./pages/ContactUs"
 import RaiseReturnRequest from "./pages/RaiseReturnRequest"
+import Wishlist from "./pages/Wishlist/Wishlist";
 
 function App() {
   const { actionLoading } = useCart();
@@ -45,6 +46,7 @@ function App() {
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/login" element={<Login />} />
           <Route
             path="/checkout"
