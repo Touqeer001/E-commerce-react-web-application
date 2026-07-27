@@ -1,121 +1,130 @@
 import "./Policy.css";
 
-const ShippingPolicy = () => {
+const PrivacyPolicy = () => {
   return (
     <div className="policy-page">
       <div className="policy-container">
-        <h1>Shipping Policy</h1>
+        <h1>Privacy Policy</h1>
 
         <p className="policy-intro">
-          We are committed to delivering your orders safely and on time. Please
-          read our shipping policy below.
+          This Privacy Policy explains how we collect, use, store, and protect
+          your personal information when you access or use our website and
+          services.
         </p>
 
         <section className="policy-section">
-          <h2>Shipping Coverage</h2>
-          <p>
-            We currently ship orders only within India. Orders are delivered
-            through our trusted courier partners.
-          </p>
-        </section>
-
-        <section className="policy-section">
-          <h2>Order Processing</h2>
-          <p>
-            Orders are processed within <strong>1–2 business days</strong> after
-            payment confirmation. Orders placed on weekends or public holidays
-            will be processed on the next working day.
-          </p>
-        </section>
-
-        <section className="policy-section">
-          <h2>Delivery Timeline</h2>
-          <p>
-            Once your order has been shipped, delivery usually takes
-            <strong> 5–7 business days</strong>, depending on your location.
-          </p>
-        </section>
-
-        <section className="policy-section">
-          <h2>Shipping Charges</h2>
+          <h2>Information We Collect</h2>
           <ul>
-            <li>
-              <strong>Prepaid Orders:</strong> Free Shipping
-            </li>
-            <li>
-              <strong>Cash on Delivery (COD):</strong> ₹49 shipping charge.
-            </li>
+            <li>Name</li>
+            <li>Phone Number</li>
+            <li>Address</li>
+            <li>Email Address</li>
+            <li>Age & Gender</li>
+            <li>Location & Language</li>
+            <li>Date of Birth</li>
+            <li>Shopping Interests & Preferences</li>
+            <li>PAN / GST Details (where applicable)</li>
+            <li>Government Issued ID & KYC Details</li>
+            <li>Browsing History</li>
+            <li>Buying Behaviour</li>
           </ul>
         </section>
 
         <section className="policy-section">
-          <h2>Change of Shipping Address</h2>
-          <p>
-            Address changes may not be possible once the order has been
-            processed because the shipping details are immediately shared with
-            our warehouse.
-          </p>
+          <h2>How We Use Your Information</h2>
+          <ul>
+            <li>Process and deliver your orders.</li>
+            <li>Provide customer support.</li>
+            <li>Recommend relevant products and services.</li>
+            <li>Improve website performance and user experience.</li>
+            <li>Resolve complaints and payment disputes.</li>
+            <li>Communicate via Email, SMS, or Phone regarding your orders.</li>
+          </ul>
+        </section>
 
+        <section className="policy-section">
+          <h2>Cookies</h2>
           <p>
-            Minor address corrections (door number, apartment number, street
-            name, etc.) can be requested within <strong>2 hours</strong> of
-            placing the order, subject to order status.
+            We use cookies and similar technologies to improve your browsing
+            experience, remember your preferences, analyze website traffic, and
+            deliver personalized advertisements. You can disable cookies
+            through your browser settings, although some website features may
+            not function properly.
           </p>
         </section>
 
         <section className="policy-section">
-          <h2>Order Tracking</h2>
+          <h2>Your Consent</h2>
           <p>
-            Once your order is dispatched, you will receive the tracking details
-            via <strong>Email, SMS, and WhatsApp</strong>.
+            By accessing or using our website, you consent to the collection,
+            storage, and use of your information in accordance with this Privacy
+            Policy.
+          </p>
+          <p>
+            You may request to review, update, or withdraw your consent by
+            contacting us through the email provided below.
           </p>
         </section>
 
         <section className="policy-section">
-          <h2>Undelivered Orders</h2>
+          <h2>Disclosure of Information</h2>
           <p>
-            If the courier partner is unable to deliver your order and the
-            package is returned to our warehouse, your refund will be initiated
-            within <strong>24–48 hours</strong> after we receive the returned
-            package.
-          </p>
-
-          <p>
-            The refunded amount will reflect in your account within
-            <strong> 5–7 working days</strong>, depending on your bank.
+            Your information may be shared with trusted service providers,
+            affiliates, logistics partners, or government authorities whenever
+            required by law or for providing our services.
           </p>
         </section>
 
         <section className="policy-section">
-          <h2>Delivery Issues</h2>
+          <h2>Security</h2>
           <p>
-            If your order status shows <strong>Delivered</strong> but you have
-            not received it, please contact our support team within
-            <strong> 24–48 hours</strong> of the delivery date.
+            We follow industry-standard security practices to protect your
+            personal information. While we take reasonable measures to secure
+            your data, no online system can guarantee complete security.
           </p>
+        </section>
+
+        <section className="policy-section">
+          <h2>Grievance Officer</h2>
 
           <p>
-            <strong>Email:</strong> support@yourstore.com
+            <strong>Mr. Prem Kumar</strong>
             <br />
-            <strong>Phone:</strong> +91 98765 43210
+            Grievance Officer
+            <br />
+            Vaishnavi Properties,
+            <br />
+            #30/1, Silicon Terraces,
+            <br />
+            2nd & 3rd Floor,
+            <br />
+            Adugodi, Hosur Main Road,
+            <br />
+            Koramangala,
+            <br />
+            Bengaluru – 560095
+          </p>
+
+          <p>
+            <strong>Email:</strong> grievance@dennislingo.com
           </p>
         </section>
 
         <section className="policy-section">
-          <h2>Delays in Delivery</h2>
+          <h2>Policy Updates</h2>
           <p>
-            Delivery may occasionally be delayed due to bad weather, public
-            holidays, natural disasters, courier issues, or other unforeseen
-            circumstances. We appreciate your patience in such cases.
+            We reserve the right to modify this Privacy Policy at any time.
+            Updated versions will be published on this page. We encourage you
+            to review this policy periodically.
           </p>
         </section>
 
         <section className="policy-section note">
-          <h2>Important Note</h2>
+          <h2>Contact Us</h2>
           <p>
-            Delivery timelines are estimated and may vary based on your
-            location. We are not responsible for delays caused by courier
-            partners or circumstances beyond our control.
+            If you have any questions regarding this Privacy Policy or your
+            personal information, please contact our support team through the
+            official grievance email mentioned above.
           </p>
         </section>
       </div>
@@ -123,4 +132,4 @@ const ShippingPolicy = () => {
   );
 };
 
-export default ShippingPolicy;
+export default PrivacyPolicy;

@@ -6,8 +6,17 @@ export const getWishlist = () => ({
   count: wishlist.length,
 });
 
-export const addToWishlist = ({ productId }) => {
-  const product = products.find((item) => Number(item.id) === Number(productId));
+export const addToWishlist = ({ productId, product: selectedProduct }) => {
+  if (productId === undefined || productId === null || productId === "") {
+    throw new Error("Product ID is required");
+  }
+
+  // The UI can use a different mock product feed from the Cart mock catalog.
+  // Preserve the selected product and its ID exactly instead of replacing it
+  // with a potentially different local product that happens to share an ID.
+  const product = selectedProduct || products.find(
+    (item) => String(item.id) === String(productId),
+  );
 
   if (!product) throw new Error("Product not found");
   if (wishlist.some((item) => Number(item.productId) === Number(productId))) {
@@ -16,12 +25,13 @@ export const addToWishlist = ({ productId }) => {
 
   const wishlistItem = {
     wishlistId: Date.now(),
-    productId: product.id,
+    productId,
     name: product.name,
-    image: product.images?.[0],
+    image: product.images?.[0] || product.image,
     price: product.price,
     color: product.color,
     size: product.size?.[0] || "",
+    product,
     addedAt: new Date().toISOString(),
   };
 

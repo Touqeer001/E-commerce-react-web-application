@@ -47,7 +47,7 @@ const ProductListCard = ({ product }) => {
           </Swiper>
         </Link>
 
-        <button className={`wishlist-btn ${isWishlisted ? "active" : ""}`} onClick={() => !isWishlisted && addItem(product.id)} disabled={actionLoading || isWishlisted} aria-label={isWishlisted ? "In wishlist" : "Add to wishlist"}>
+        <button className={`wishlist-btn ${isWishlisted ? "active" : ""}`} onClick={() => !isWishlisted && addItem(product)} disabled={actionLoading || isWishlisted} aria-label={isWishlisted ? "In wishlist" : "Add to wishlist"}>
           <FaHeart />
         </button>
 

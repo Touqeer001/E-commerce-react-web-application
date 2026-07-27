@@ -22,12 +22,12 @@ const WishlistProvider = ({ children }) => {
 
   useEffect(() => { fetchWishlist(); }, []);
 
-  const addItem = async (productId) => {
+  const addItem = async (product) => {
     if (addingRef.current) return false;
     addingRef.current = true;
     setActionLoading(true);
     try {
-      const response = await addWishlistAPI(productId);
+      const response = await addWishlistAPI(product);
       await fetchWishlist();
       toast.success(response.data.message || "Added to wishlist.");
       return true;

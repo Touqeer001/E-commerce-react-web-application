@@ -165,7 +165,7 @@ const ProductInfo = ({ product }) => {
         <FaShoppingCart />
         {actionLoading ? "ADDING..." : "ADD TO CART"}
       </button>
-      <button className="cart-button wishlist-product-button" onClick={() => !isWishlisted && addItem(product.id)} disabled={wishlistLoading || isWishlisted} type="button">
+      <button className="cart-button wishlist-product-button" onClick={() => !isWishlisted && addItem(product)} disabled={wishlistLoading || isWishlisted} type="button">
         <FaHeart /> {isWishlisted ? "SAVED TO WISHLIST" : "ADD TO WISHLIST"}
       </button>
 
