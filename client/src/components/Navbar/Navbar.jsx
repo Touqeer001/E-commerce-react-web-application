@@ -4,7 +4,6 @@ import {
   FaBoxOpen,
   FaShoppingCart,
   FaSearch,
-  FaChevronDown,
   FaSignOutAlt,
   FaUserCircle,
   FaRegHeart,
@@ -18,10 +17,12 @@ import megaMenu from "../../data/megaMenu";
 
 import useCart from "../../hooks/useCart";
 import useAuth from "../../hooks/useAuth";
+import useWishlist from "../../hooks/useWishlist";
 
 function Navbar() {
   const { cart } = useCart();
   const { isAuthenticated, logout } = useAuth();
+  const { wishlist } = useWishlist();
 
   const [activeMenu, setActiveMenu] = useState(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -112,8 +113,9 @@ function Navbar() {
             </Link>
           )}
 
-          <Link to="/wishlist" className="icon-btn">
+          <Link to="/wishlist" className="icon-btn wishlist-icon" aria-label="Wishlist">
             <FaRegHeart />
+            {wishlist.count > 0 && <span className="cart-count">{wishlist.count}</span>}
           </Link>
 
           <Link to="/cart" className="icon-btn cart-icon">

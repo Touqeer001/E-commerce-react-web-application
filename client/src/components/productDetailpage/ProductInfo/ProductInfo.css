@@ -298,3 +298,14 @@ details p {
 
     border-color:black;
 }
+
+.wishlist-product-button {
+  margin-top: -18px;
+  background: #fff;
+  border: 1px solid #111;
+  color: #111;
+}
+
+.wishlist-product-button:hover {
+  background: #f4f4f4;
+}

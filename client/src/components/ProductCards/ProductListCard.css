@@ -163,3 +163,8 @@
 .product-card:hover .swiper-button-next {
   opacity: 1;
 }
+
+.wishlist-btn.active {
+  opacity: 1;
+  color: #e04b62;
+}

@@ -10,6 +10,8 @@ import orderRoutes from "./routes/orderRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import megaMenuRoutes from "./routes/megaMenuRoutes.js";
 import searchRoutes from "./routes/searchRoutes.js";
+import wishlistRoutes from "./routes/wishlistRoutes.js";
+import trackingRoutes from "./routes/trackingRoutes.js";
 
 
 
@@ -49,12 +51,14 @@ app.use("/categories", categoryRoutes);
 
 // cart
 app.use("/cart", cartRoutes);
+app.use("/wishlist", wishlistRoutes);
 
 // auth
 app.use("/auth", authRoutes);
 
 // orders
 app.use("/orders", orderRoutes);
+app.use("/tracking", trackingRoutes);
 
 app.use("/payment", paymentRoutes);
 
