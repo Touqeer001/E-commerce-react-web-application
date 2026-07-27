@@ -14,14 +14,11 @@ const mockApi = axios.create({
 });
 
 
-export const getAllProducts = () => mockApi.get("/products");
+export const getAllProducts = () => api.get("/products");
 
-export const getProductById = (id) => mockApi.get(`/products/${id}`);
-// Local mock-backend fallback used by features (such as Wishlist) that store
-// product IDs through the same backend data flow as Cart.
-export const getLocalProductById = (id) => api.get(`/products/${id}`);
+export const getProductById = (id) => api.get(`/products/${id}`);
 
-export const getAllBanners = () => mockApi.get("/banners");
+export const getAllBanners = () => api.get("/banners");
 export const getAllCategories = () => mockApi.get("/categories");
 
 export const getCurrentUser = () => api.get("/auth/me");
