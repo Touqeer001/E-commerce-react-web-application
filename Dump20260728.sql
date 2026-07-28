@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 8.0.46, for Win64 (x86_64)
 --
--- Host: localhost    Database: littletrends
+-- Host: localhost    Database: littletrend
 -- ------------------------------------------------------
 -- Server version	9.7.1
 
