@@ -13,6 +13,7 @@ import searchRoutes from "./routes/searchRoutes.js";
 import wishlistRoutes from "./routes/wishlistRoutes.js";
 import trackingRoutes from "./routes/trackingRoutes.js";
 import pool from "./config/db.js";
+import addressRoutes from "./routes/addressRoutes.js";
 
 
 
@@ -68,12 +69,15 @@ app.use("/auth", authRoutes);
 
 // orders
 app.use("/orders", orderRoutes);
+
 app.use("/tracking", trackingRoutes);
 
 app.use("/payment", paymentRoutes);
 
 //search
 app.use("/search", searchRoutes);
+
+app.use("/address", addressRoutes);
 
 // Home Route
 app.get("/", (req, res) => {

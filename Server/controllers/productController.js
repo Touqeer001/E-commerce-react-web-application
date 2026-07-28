@@ -87,11 +87,15 @@ export const getProductById = async (req, res) => {
       `
       SELECT
         p.*,
-        c.name AS category
+        c.name AS category,
+        GROUP_CONCAT(DISTINCT pi.image_url) AS images
       FROM products p
       LEFT JOIN categories c
-      ON p.category_id=c.id
-      WHERE p.id=?
+        ON p.category_id = c.id
+      LEFT JOIN product_images pi
+        ON p.id = pi.product_id
+      WHERE p.id = ?
+      GROUP BY p.id
       `,
       [id]
     );
@@ -102,7 +106,14 @@ export const getProductById = async (req, res) => {
       });
     }
 
-    res.json(rows[0]);
+    const product = rows[0];
+
+    product.images = product.images
+      ? product.images.split(",")
+      : [];
+
+    res.json(product);
+
   } catch (err) {
     res.status(500).json({
       message: err.message,

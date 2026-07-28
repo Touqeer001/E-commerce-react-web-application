@@ -31,11 +31,9 @@ export const getCart = async (req, res) => {
  */
 export const createCartItem = async (req, res) => {
   try {
-    console.log("Request Body:", req.body);
 
     const cartItem = await addToCart(req.body);
 
-    console.log("Cart Item:", cartItem);
 
     res.status(201).json({
       success: true,

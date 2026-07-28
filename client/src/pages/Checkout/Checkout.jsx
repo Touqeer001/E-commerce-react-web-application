@@ -5,7 +5,7 @@ import useAuth from "../../hooks/useAuth";
 import "./Checkout.css";
 import { useEffect, useRef, useState } from "react";
 import dropin from "braintree-web-drop-in";
-import { getClientToken, processPayment } from "../../Services/api";
+import { createOrder, getClientToken, processPayment, saveAddress } from "../../Services/api";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -14,18 +14,30 @@ const Checkout = () => {
   const { user } = useAuth();
   const [clientToken, setClientToken] = useState("");
   const [instance, setInstance] = useState(null);
+  
 
   const [address, setAddress] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    phone: "",
-    street: "",
-    city: "",
-    state: "",
-    pincode: "",
-    country: "",
-  });
+  firstName: "",
+  lastName: "",
+  email: "",
+  phone: "",
+  city: "",
+  state: "",
+  pincode: "",
+  country: "",
+});
+
+  // const addressRes = saveAddress({
+  //   user_id: user.id,
+  //   first_name: address.firstName,
+  //   last_name: address.lastName,
+  //   email: address.email,
+  //   phone: address.phone,
+  //   city: address.city,
+  //   state: address.state,
+  //   pincode: address.pincode,
+  //   country: address.country,
+  // });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -51,7 +63,6 @@ const Checkout = () => {
   useEffect(() => {
     console.log("Client Token:", clientToken);
     if (!clientToken || !dropinContainer.current) return;
-    console.log("Creating Drop-in...");
 
     let dropinInstance;
 
@@ -67,7 +78,6 @@ const Checkout = () => {
         }
 
         dropinInstance = createdInstance;
-        console.log("DropIn Created");
         setInstance(createdInstance);
       },
     );
@@ -79,77 +89,65 @@ const Checkout = () => {
     };
   }, [clientToken]);
 
+
+
   const handlePayment = async () => {
-    if (!instance) {
-      alert("Payment UI is still loading.");
+  if (!instance) {
+    toast.error("Payment UI is still loading.");
+    return;
+  }
+
+  try {
+    const { nonce } = await instance.requestPaymentMethod();
+
+    const paymentRes = await processPayment({
+      nonce,
+      amount: cart.total,
+    });
+
+    if (!paymentRes.data.success) {
+      toast.error("Payment Failed");
       return;
     }
 
-    try {
-      // Get payment nonce from Braintree
-      const { nonce } = await instance.requestPaymentMethod();
+    // Save Address
+    const addressRes = await saveAddress({
+      user_id:1, 
+      first_name: address.firstName,
+      last_name: address.lastName,
+      email: address.email,
+      phone: address.phone,
+      city: address.city,
+      state: address.state,
+      pincode: address.pincode,
+      country: address.country,
+    });
 
-      // Process payment
-      const res = await processPayment({
-        nonce,
-        amount: cart.total,
-      });
+    // Create Order
+    const orderRes = await createOrder({
+      user_id: 1,
+      address_id: addressRes.data.addressId,
+      subtotal: cart.subtotal,
+      tax: cart.tax,
+      shipping: cart.shipping,
+      total: cart.total,
+      payment_status: "Paid",
+      order_status: "Paid",
+      items: cart.items,
+    });
 
-      console.log("Payment Response:", res.data);
 
-      // Check payment success
-      if (!res.data.success) {
-        toast.error("Payment Failed");
-        return;
-      }
+    // Clear Cart
+  
 
-      // Create Order
-      const order = {
-        orderId: `ORD-${Date.now()}`,
-        orderDate: new Date().toLocaleDateString(),
-        address,
-        paymentMethod: "",
-        status: "Shipped",
-        paymentStatus: "Paid",
-        estimatedDelivery: "3 to 4 days",
-        items: cart.items,
-        subtotal: cart.subtotal,
-        tax: cart.tax,
-        shipping: cart.shipping,
-        total: cart.total,
-      };
+    toast.success("Order Placed Successfully");
 
-      // Save latest order
-      localStorage.setItem("latestOrder", JSON.stringify(order));
-
-      // Save all orders
-      const orders =
-        JSON.parse(localStorage.getItem("orders")) || [];
-
-      orders.unshift(order);
-
-      localStorage.setItem(
-        "orders",
-        JSON.stringify(orders)
-      );
-
-      console.log(
-        "Orders Saved:",
-        JSON.parse(localStorage.getItem("orders"))
-      );
-
-      // Optional: Clear Cart
-      // await clearCart();
-
-      toast.success("Order Placed Successfully!");
-
-      navigate("/order-success");
-    } catch (error) {
-      console.error("Payment Error:", error);
-      toast.error("Something went wrong.");
-    }
-  };
-
+   navigate(`/order-success/${orderRes.data.orderId}`);
+  } catch (error) {
+    console.error(error);
+    toast.error("Something went wrong");
+  }
+};
   return (
     <main className="checkout-page">
       <section className="checkout-header">
@@ -250,7 +248,7 @@ const Checkout = () => {
           </button>
         </div>
 
-        
+
       </section>
     </main>
   );

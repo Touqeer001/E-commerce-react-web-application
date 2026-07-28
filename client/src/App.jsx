@@ -81,7 +81,7 @@ function App() {
             }
           />
 
-          <Route path="/order-success" element={<OrderSuccess />} />
+          <Route  path="/order-success/:orderId" element={<OrderSuccess />} />
         </Route>
       </Routes>
     </>

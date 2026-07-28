@@ -9,7 +9,7 @@ const ProductInfo = ({ product }) => {
     product?.size?.[0] || ""
   );
   const [quantity, setQuantity] = useState(1);
-   const [selectedImage, setSelectedImage] = useState(
+  const [selectedImage, setSelectedImage] = useState(
     product?.images?.[0] || ""
   );
 
@@ -86,24 +86,19 @@ const ProductInfo = ({ product }) => {
         <h4>
           COLOR : <span>{product.color}</span>
         </h4>
-         <div className="color-variants">
 
-        {product.images.map((img, index) => (
-
-          <div
-            key={index}
-            className={`variant-card ${selectedImage === img ? "active" : ""
-              }`}
-            onClick={() => setSelectedImage(img)}
-          >
-
-            <img src={img} />
-
-          </div>
-
-        ))}
-
-      </div>
+        <div className="color-variants">
+          {product.images?.map((img, index) => (
+            <div
+              key={index}
+              className={`variant-card ${selectedImage === img ? "active" : ""
+                }`}
+              onClick={() => setSelectedImage(img)}
+            >
+              <img src={img} alt={`${product.name}-${index}`} />
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Size */}
@@ -111,8 +106,8 @@ const ProductInfo = ({ product }) => {
       <div className="size-header">
         <h4>SIZE</h4>
 
-        
-          
+
+
       </div>
 
       <div className="size-list">
@@ -120,9 +115,8 @@ const ProductInfo = ({ product }) => {
           <button
             key={size}
             type="button"
-            className={`size-btn ${
-              selectedSize === size ? "active" : ""
-            }`}
+            className={`size-btn ${selectedSize === size ? "active" : ""
+              }`}
             onClick={() => setSelectedSize(size)}
           >
             {size}

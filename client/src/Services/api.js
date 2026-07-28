@@ -23,9 +23,17 @@ export const getAllCategories = () => mockApi.get("/categories");
 
 export const getCurrentUser = () => api.get("/auth/me");
 export const logoutUser = () => api.post("/auth/logout");
+export const getLocalProductById = (id) => api.get(`/products/${id}`);
 
 export const getOrders = () => api.get("/orders");
+
 export const getOrderById = (orderId) => api.get(`/orders/${orderId}`);
+
+export const saveAddress = (data) =>
+  api.post("/address", data);
+
+export const createOrder = (data) =>
+  api.post("/orders", data);
 
 export const getClientToken = () => api.get("/payment/token");
 
@@ -39,6 +47,8 @@ export const processPayment = ({ nonce, amount }) =>
   export const searchProducts = (query) =>
   api.get(`/search?q=${query}`);
 
+  export const getOrdersByUser = (userId) =>
+  api.get(`/orders/user/${userId}`);
 
 export const API_BASE_URL = BASE_URL;
 

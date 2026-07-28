@@ -20,9 +20,7 @@ const ProductListCard = ({ product }) => {
         )
       : 0;
 
-  console.log(product);
-  console.log("Product Object:", product);
-  console.log("Product ID:", product.id);
+
 
   return (
     <div className="product-card">
