@@ -31,7 +31,7 @@ function CategoryCards() {
         {categories.map((category) => (
           <Link
             key={category.id}
-            to={`/products?category=${encodeURIComponent(category.name)}`}
+            to={`/products`}
             className="category-card"
           >
             <img

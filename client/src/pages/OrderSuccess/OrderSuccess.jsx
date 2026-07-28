@@ -1,69 +1,76 @@
 import { useEffect, useState } from "react";
 import { FaCheckCircle, FaTruck } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { getOrderById } from "../../Services/api";
 import "./OrderSuccess.css";
 
 const OrderSuccess = () => {
   const navigate = useNavigate();
+  const { orderId } = useParams();
+
   const [order, setOrder] = useState(null);
 
   useEffect(() => {
-    const latestOrder = localStorage.getItem("latestOrder");
+    const fetchOrder = async () => {
+      try {
+        const res = await getOrderById(orderId);
 
-    if (latestOrder) {
-      setOrder(JSON.parse(latestOrder));
-    } else {
-      navigate("/");
-    }
-  }, [navigate]);
+        if (res.data.success) {
+          setOrder(res.data.order);
+        } else {
+          navigate("/");
+        }
+      } catch (err) {
+        console.error(err);
+        navigate("/");
+      }
+    };
+
+    fetchOrder();
+  }, [orderId, navigate]);
 
   if (!order) return null;
 
   return (
     <main className="order-success-page">
       <div className="order-success-card">
-        {/* Success Icon */}
         <div className="success-icon">
           <FaCheckCircle />
         </div>
 
-        {/* Heading */}
         <h1>Order Placed Successfully!</h1>
 
         <p className="success-message">
           Thank you for shopping with TinyThreads.
         </p>
 
-        {/* Order Summary */}
         <div className="order-summary">
           <div className="summary-row">
             <span>Order ID</span>
-            <strong>{order.orderId}</strong>
+            <strong>{order.id}</strong>
           </div>
 
           <div className="summary-row">
             <span>Order Date</span>
-            <strong>{order.orderDate}</strong>
+            <strong>
+              {new Date(order.created_at).toLocaleDateString()}
+            </strong>
           </div>
 
           <div className="summary-row">
             <span>Payment Status</span>
-            <strong className="paid">Paid</strong>
+            <strong className="paid">
+              {order.payment_status}
+            </strong>
           </div>
-
-          {/* <div className="summary-row">
-            <span>Payment Method</span>
-            <strong>{order.paymentMethod}</strong>
-          </div> */}
         </div>
 
-        {/* Delivery Box */}
         <div className="delivery-box">
           <FaTruck className="truck-icon" />
 
           <div>
             <h3>Estimated Delivery</h3>
-            <p>{order.estimatedDelivery}</p>
+            <p>3 - 5 Business Days</p>
           </div>
         </div>
 
@@ -71,11 +78,10 @@ const OrderSuccess = () => {
           You will receive an email confirmation shortly.
         </p>
 
-        {/* Buttons */}
         <button
           className="primary-btn"
           onClick={() =>
-            navigate(`/account/orders/${order.orderId}`)
+            navigate(`/account/orders/${order.id}`)
           }
         >
           View Order Details

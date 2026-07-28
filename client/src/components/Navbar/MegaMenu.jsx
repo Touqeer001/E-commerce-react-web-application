@@ -10,7 +10,7 @@ const MegaMenu = ({ menu }) => {
         <h3>Shop By Category</h3>
 
         {menu.categories.map((item) => (
-          <Link key={item.slug} to={`/category/${item.slug}`}>
+          <Link key={item.slug} to={`/products`}>
             {item.name}
           </Link>
         ))}

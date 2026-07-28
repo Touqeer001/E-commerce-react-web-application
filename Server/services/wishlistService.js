@@ -1,4 +1,4 @@
-import products from "../data/products.js";
+// import products from "../data/products.js";
 import wishlist from "../data/wishlistData.js";
 
 export const getWishlist = () => ({

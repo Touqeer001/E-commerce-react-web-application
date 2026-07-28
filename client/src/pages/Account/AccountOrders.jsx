@@ -2,18 +2,26 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import AccountLayout from "./AccountLayout";
 import "./AccountOrder.css";
+import { getOrdersByUser } from "../../Services/api";
 
 const AccountOrders = () => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    const storedOrders =
-      JSON.parse(localStorage.getItem("orders")) || [];
+  const fetchOrders = async () => {
+    try {
+      const res = await getOrdersByUser(1); // baad me user.id kar dena
 
-    console.log("Orders from LocalStorage:", storedOrders);
+      if (res.data.success) {
+        setOrders(res.data.orders);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-    setOrders(storedOrders);
-  }, []);
+  fetchOrders();
+}, []);
 
   return (
     <AccountLayout title="My Orders">
@@ -40,48 +48,43 @@ const AccountOrders = () => {
             return (
               <Link
                 key={order.orderId}
-                to={`/account/orders/${order.orderId}`}
+                to={`/account/orders/${order.id}`}
                 className="order-card"
               >
                 <div className="order-product">
                   <img
-                    src={firstItem?.image}
+                   src={order.image}
                     alt={firstItem?.name}
                     className="order-product-image"
                   />
                 </div>
 
                 <div className="order-left">
-                  <h3>{firstItem?.name}</h3>
+                  <h3>{order.name}</h3>
 
                   <p>
-                    <strong>Order ID:</strong> {order.orderId}
+                    <strong>Order ID:</strong> {order.id}
                   </p>
 
                   <p>
-                    <strong>Order Date:</strong> {order.orderDate}
+                    <strong>Order Date:</strong> {new Date(order.created_at).toLocaleDateString()}
                   </p>
 
                   <p>
-                    <strong>Items:</strong> {order.items.length}
+                    <strong>Items:</strong> {order.quantity}
                   </p>
                 </div>
 
                 <div className="order-right">
                   <span className="order-status">
-                    {order.paymentStatus}
+                    {order.payment_status}
                   </span>
 
                   <h3>₹{order.total}</h3>
 
                   <small>{order.paymentMethod}</small>
                 </div>
-                <p
-                  className={`order-status ${order.isCancelled ? "cancelled" : "active"
-                    }`}
-                >
-                  {order.isCancelled ? "Cancelled" : "Active"}
-                </p>
+                
 
               </Link>
 

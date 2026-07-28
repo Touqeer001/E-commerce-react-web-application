@@ -30,7 +30,6 @@ const CartProvider = ({ children }) => {
   // Fetch Cart
   const fetchCart = async () => {
     setPageLoading(true);
-    console.log("Loading Started");
 
     try {
       const response = await getCart();

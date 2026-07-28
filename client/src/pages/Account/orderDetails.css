@@ -1,2 +1,341 @@
-.order-details-page { min-height:100vh; background:#eaeded; padding:34px 18px 52px; color:#111; }.order-container { max-width:1180px; margin:auto; }.tracking-order-header { display:flex; justify-content:space-between; align-items:center; gap:20px; padding:8px 4px 24px; }.tracking-order-header p { margin:0 0 5px; color:#555; }.tracking-order-header h1 { margin:0 0 7px; font-size:1.7rem; }.tracking-order-header span { color:#147a31; font-weight:600; }.tracking-order-header button { background:#fff; border:1px solid #aaa; border-radius:8px; padding:10px 14px; cursor:pointer; }.tracking-card,.card { background:#fff; border:1px solid #d5d9d9; border-radius:10px; box-shadow:0 1px 2px #00000012; }.tracking-card { padding:22px 26px; margin-bottom:22px; }.tracking-meta { display:flex; gap:56px; padding-bottom:22px; border-bottom:1px solid #eee; }.tracking-meta div { display:grid; gap:4px; }.tracking-meta span { color:#666; font-size:.82rem; text-transform:uppercase; letter-spacing:.04em; }.tracking-progress { display:flex; justify-content:space-between; margin-top:27px; position:relative; }.tracking-progress:before { content:""; position:absolute; height:4px; background:#d5d9d9; top:17px; left:8%; right:8%; z-index:0; }.tracking-step { z-index:1; width:20%; text-align:center; color:#737373; font-size:.82rem; }.step-marker { width:36px; height:36px; border-radius:50%; display:grid; place-items:center; background:#fff; border:3px solid #aeb4b4; margin:auto; }.tracking-step.complete { color:#147a31; font-weight:700; }.tracking-step.complete .step-marker { background:#147a31; border-color:#147a31; color:#fff; animation:tracking-pop .45s ease both; }.tracking-step p { margin:9px -15px 0; }@keyframes tracking-pop { from { transform:scale(.5); } to { transform:scale(1); } }.order-grid { display:grid; grid-template-columns:1.55fr 1fr; gap:20px; }.card { padding:20px; }.card h2 { margin:0 0 17px; font-size:1.15rem; display:flex; align-items:center; gap:8px; }.tracking-history { grid-row:span 2; }.history-event { position:relative; display:flex; gap:14px; padding:0 0 25px; }.history-event:not(:last-child):before { content:""; width:2px; background:#d5d9d9; position:absolute; left:5px; top:12px; bottom:0; }.history-dot { height:12px; width:12px; flex:none; border-radius:50%; background:#147a31; margin-top:4px; z-index:1; }.history-event h3 { margin:0 0 4px; font-size:1rem; }.history-event p,.history-event small,.card p { margin:4px 0; color:#555; }.history-event small { font-size:.78rem; }.product { display:flex; align-items:center; gap:14px; padding:12px 0; border-top:1px solid #eee; }.product img { width:72px; height:72px; object-fit:cover; border-radius:6px; }.product-info { flex:1; }.product-info h3 { margin:0; font-size:.95rem; }.product-info p { font-size:.83rem; }.price-row { display:flex; justify-content:space-between; margin:10px 0; }.total { font-size:1.05rem; }.paid { color:#147a31; font-weight:700; }.btns { display:flex; gap:15px; margin-top:22px; }.btns button { border-radius:8px; padding:12px 18px; font-weight:700; cursor:pointer; }.cancel-btn { background:#fff; border:1px solid #a61b1b; color:#a61b1b; }.continue-btn { background:#ffd814; border:1px solid #fcd200; }.cancel-order-message { background:#fff4f4; padding:12px 16px; border-radius:8px; border:1px solid #e3aaaa; }.cancel-order-message p { margin:4px 0 0; }
-@media (max-width:720px) { .order-details-page { padding:20px 12px; }.tracking-order-header { align-items:flex-start; flex-direction:column; }.tracking-card { padding:18px 14px; }.tracking-meta { gap:20px; flex-direction:column; }.tracking-progress { overflow-x:auto; justify-content:flex-start; gap:23px; padding-bottom:8px; }.tracking-progress:before { width:370px; right:auto; left:32px; }.tracking-step { min-width:85px; }.tracking-step p { margin:8px -10px 0; }.order-grid { grid-template-columns:1fr; }.tracking-history { grid-row:auto; }.btns { flex-wrap:wrap; }.btns button { flex:1; }.product { align-items:flex-start; } }
+.order-details-page {
+    min-height: 100vh;
+    background: #eaeded;
+    padding: 34px 18px 52px;
+    color: #111;
+}
+
+.order-container {
+    max-width: 1180px;
+    margin: auto;
+}
+
+.tracking-order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 8px 4px 24px;
+}
+
+.tracking-order-header p {
+    margin: 0 0 5px;
+    color: #555;
+}
+
+.tracking-order-header h1 {
+    margin: 0 0 7px;
+    font-size: 1.7rem;
+}
+
+.tracking-order-header span {
+    color: #147a31;
+    font-weight: 600;
+}
+
+.tracking-order-header button {
+    background: #fff;
+    border: 1px solid #aaa;
+    border-radius: 8px;
+    padding: 10px 14px;
+    cursor: pointer;
+}
+
+.tracking-card,
+.card {
+    background: #fff;
+    border: 1px solid #d5d9d9;
+    border-radius: 10px;
+    box-shadow: 0 1px 2px #00000012;
+}
+
+.tracking-card {
+    padding: 22px 26px;
+    margin-bottom: 22px;
+}
+
+.tracking-meta {
+    display: flex;
+    gap: 56px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid #eee;
+}
+
+.tracking-meta div {
+    display: grid;
+    gap: 4px;
+}
+
+.tracking-meta span {
+    color: #666;
+    font-size: .82rem;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+}
+
+.tracking-progress {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 27px;
+    position: relative;
+}
+
+.tracking-progress:before {
+    content: "";
+    position: absolute;
+    height: 4px;
+    background: #d5d9d9;
+    top: 17px;
+    left: 8%;
+    right: 8%;
+    z-index: 0;
+}
+
+.tracking-step {
+    z-index: 1;
+    width: 20%;
+    text-align: center;
+    color: #737373;
+    font-size: .82rem;
+}
+
+.step-marker {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: #fff;
+    border: 3px solid #aeb4b4;
+    margin: auto;
+}
+
+.tracking-step.complete {
+    color: #147a31;
+    font-weight: 700;
+}
+
+.tracking-step.complete .step-marker {
+    background: #147a31;
+    border-color: #147a31;
+    color: #fff;
+    animation: tracking-pop .45s ease both;
+}
+
+.tracking-step p {
+    margin: 9px -15px 0;
+}
+
+@keyframes tracking-pop {
+    from {
+        transform: scale(.5);
+    }
+
+    to {
+        transform: scale(1);
+    }
+}
+
+.order-grid {
+    display: grid;
+    grid-template-columns: 1.55fr 1fr;
+    gap: 20px;
+}
+
+.card {
+    padding: 20px;
+}
+
+.card h2 {
+    margin: 0 0 17px;
+    font-size: 1.15rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.tracking-history {
+    grid-row: span 2;
+}
+
+.history-event {
+    position: relative;
+    display: flex;
+    gap: 14px;
+    padding: 0 0 25px;
+}
+
+.history-event:not(:last-child):before {
+    content: "";
+    width: 2px;
+    background: #d5d9d9;
+    position: absolute;
+    left: 5px;
+    top: 12px;
+    bottom: 0;
+}
+
+.history-dot {
+    height: 12px;
+    width: 12px;
+    flex: none;
+    border-radius: 50%;
+    background: #147a31;
+    margin-top: 4px;
+    z-index: 1;
+}
+
+.history-event h3 {
+    margin: 0 0 4px;
+    font-size: 1rem;
+}
+
+.history-event p,
+.history-event small,
+.card p {
+    margin: 4px 0;
+    color: #555;
+}
+
+.history-event small {
+    font-size: .78rem;
+}
+
+.product {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 0;
+    border-top: 1px solid #eee;
+}
+
+.product img {
+    width: 72px;
+    height: 72px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.product-info {
+    flex: 1;
+}
+
+.product-info h3 {
+    margin: 0;
+    font-size: .95rem;
+}
+
+.product-info p {
+    font-size: .83rem;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+}
+
+.total {
+    font-size: 1.05rem;
+}
+
+.paid {
+    color: #147a31;
+    font-weight: 700;
+}
+
+.btns {
+    display: flex;
+    gap: 15px;
+    margin-top: 22px;
+}
+
+.btns button {
+    border-radius: 8px;
+    padding: 12px 18px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    background: #fff;
+    border: 1px solid #a61b1b;
+    color: #a61b1b;
+}
+
+.continue-btn {
+    background: #ffd814;
+    border: 1px solid #fcd200;
+}
+
+.cancel-order-message {
+    background: #fff4f4;
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: 1px solid #e3aaaa;
+}
+
+.cancel-order-message p {
+    margin: 4px 0 0;
+}
+
+@media (max-width:720px) {
+    .order-details-page {
+        padding: 20px 12px;
+    }
+
+    .tracking-order-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .tracking-card {
+        padding: 18px 14px;
+    }
+
+    .tracking-meta {
+        gap: 20px;
+        flex-direction: column;
+    }
+
+    .tracking-progress {
+        overflow-x: auto;
+        justify-content: flex-start;
+        gap: 23px;
+        padding-bottom: 8px;
+    }
+
+    .tracking-progress:before {
+        width: 370px;
+        right: auto;
+        left: 32px;
+    }
+
+    .tracking-step {
+        min-width: 85px;
+    }
+
+    .tracking-step p {
+        margin: 8px -10px 0;
+    }
+
+    .order-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tracking-history {
+        grid-row: auto;
+    }
+
+    .btns {
+        flex-wrap: wrap;
+    }
+
+    .btns button {
+        flex: 1;
+    }
+
+    .product {
+        align-items: flex-start;
+    }
+}
