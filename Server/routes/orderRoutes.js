@@ -13,7 +13,7 @@ const router = express.Router();
 router.post("/", requireAuth, createOrder);
 
 // Get all orders
-router.get("/", requireAuth, getOrders);
+router.get("/", requireAuth,   getOrders);
 
 router.get("/user/:userId", getOrdersByUser);
 // Get single order
