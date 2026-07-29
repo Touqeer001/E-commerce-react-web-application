@@ -14,6 +14,7 @@ import wishlistRoutes from "./routes/wishlistRoutes.js";
 import trackingRoutes from "./routes/trackingRoutes.js";
 import pool from "./config/db.js";
 import addressRoutes from "./routes/addressRoutes.js";
+import adminRoutes from "./routes/admin/adminRoutes.js";
 
 
 
@@ -40,7 +41,10 @@ console.log("Private Key:", process.env.BRAINTREE_PRIVATE_KEY);
 
 const app = express();
 
-const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:5173";
+const CLIENT_URL = [
+  "http://localhost:5173", // Customer App
+  "http://localhost:5174", // Admin App
+];
 
 // Middleware
 app.use(cors({
@@ -49,6 +53,8 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use("/uploads", express.static("uploads"));
+app.use("/api/admin", adminRoutes);
 
 //product routes
 
