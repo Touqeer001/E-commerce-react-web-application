@@ -106,6 +106,9 @@ export const getProductById = async (req, res) => {
       });
     }
 
+
+    //SS
+
     const product = rows[0];
 
     product.images = product.images
