@@ -1,0 +1,10 @@
+import express from "express";
+import * as c from "../../controllers/admin/adminController.js";
+import { requireAdminAuth, authorizeRoles } from "../../middleware/adminAuthMiddleware.js";
+import { productImagesUpload } from "../../middleware/adminUploadMiddleware.js";
+const router = express.Router();
+router.post("/auth/login", c.login); router.use(requireAdminAuth); router.get("/auth/me", c.me); router.put("/auth/password", c.changePassword); router.get("/dashboard", c.dashboard);
+router.route("/categories").get(c.listCategories).post(authorizeRoles("SUPER_ADMIN","ADMIN"),c.createCategory); router.route("/categories/:id").put(authorizeRoles("SUPER_ADMIN","ADMIN"),c.updateCategory).delete(authorizeRoles("SUPER_ADMIN"),c.deleteCategory);
+router.route("/products").get(c.listProducts).post(authorizeRoles("SUPER_ADMIN","ADMIN","EDITOR"),productImagesUpload,c.createProduct); router.route("/products/:id").get(c.getProduct).put(authorizeRoles("SUPER_ADMIN","ADMIN","EDITOR"),productImagesUpload,c.updateProduct).delete(authorizeRoles("SUPER_ADMIN","ADMIN"),c.deleteProduct); router.patch("/products/:id/stock",authorizeRoles("SUPER_ADMIN","ADMIN","EDITOR"),c.updateStock);
+router.get("/orders",c.listOrders); router.get("/orders/:id",c.getOrder); router.patch("/orders/:id/status",authorizeRoles("SUPER_ADMIN","ADMIN","EDITOR"),c.updateOrderStatus); router.get("/customers",c.listCustomers); router.get("/customers/:id",c.getCustomer);
+export default router;
