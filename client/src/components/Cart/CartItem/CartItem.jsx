@@ -1,86 +1,46 @@
 import "./CartItem.css";
 
 import useCart from "../../../hooks/useCart";
+import { getImageUrl } from "../../../utils/imageHelper";
 
 const CartItem = ({ item }) => {
+  const { updateQuantity, removeItem } = useCart();
 
-    const {
-        updateQuantity,
-        removeItem
-    } = useCart();
+  return (
+    <div className="cart-item">
+      <img src={getImageUrl(item.image)} alt={item.name} />
 
-    return (
+      <div className="cart-info">
+        <h3>{item.name}</h3>
 
-        <div className="cart-item">
+        <p>
+          Size :<strong>{item.size}</strong>
+        </p>
 
-            <img
-                src={item.image}
-                alt={item.name}
-            />
+        <p>
+          Color :<strong>{item.color}</strong>
+        </p>
 
-            <div className="cart-info">
+        <h2>₹{item.price}</h2>
+      </div>
 
-                <h3>{item.name}</h3>
+      <div className="qty-box">
+        <button onClick={() => updateQuantity(item.cartId, item.quantity - 1)}>
+          -
+        </button>
 
-                <p>
-                    Size :
-                    <strong>{item.size}</strong>
-                </p>
+        <span>{item.quantity}</span>
 
-                <p>
-                    Color :
-                    <strong>{item.color}</strong>
-                </p>
+        <button onClick={() => updateQuantity(item.cartId, item.quantity + 1)}>
+          +
+        </button>
+      </div>
 
-                <h2>
-                    ₹{item.price}
-                </h2>
-
-            </div>
-
-            <div className="qty-box">
-
-                <button
-                    onClick={() =>
-                        updateQuantity(
-                            item.cartId,
-                            item.quantity - 1
-                        )
-                    }
-                >
-                    -
-                </button>
-
-                <span>
-                    {item.quantity}
-                </span>
-
-                <button
-                    onClick={() =>
-                        updateQuantity(
-                            item.cartId,
-                            item.quantity + 1
-                        )
-                    }
-                >
-                    +
-                </button>
-
-            </div>
-
-            <button
-                className="remove-btn"
-                onClick={() =>
-                    removeItem(item.cartId)
-                }
-            >
-                Remove
-            </button>
-
-        </div>
-
-    );
-
+      <button className="remove-btn" onClick={() => removeItem(item.cartId)}>
+        Remove
+      </button>
+    </div>
+  );
 };
 
 export default CartItem;

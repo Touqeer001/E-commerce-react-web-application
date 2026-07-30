@@ -61,7 +61,7 @@ const ProductListing = () => {
     if (selectedCategory && selectedCategory.toLowerCase() !== "all") {
       updatedProducts = updatedProducts.filter(
         (product) =>
-          product.category.toLowerCase() === selectedCategory.toLowerCase(),
+          product.category?.toLowerCase() === selectedCategory.toLowerCase(),
       );
     }
 

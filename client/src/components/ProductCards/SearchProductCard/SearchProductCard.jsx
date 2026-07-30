@@ -7,6 +7,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 
 import "./SearchProductCard.css";
+import { getImageUrl } from "../../../utils/imageHelper";
 
 const SearchProductCard = ({ product }) => {
   return (
@@ -31,10 +32,10 @@ const SearchProductCard = ({ product }) => {
         >
           <SwiperSlide>
             <Link to={`/product/${product.id}`}>
-              <img
-                src={product.image}
-                alt={product.name}
-              />
+            <img
+  src={getImageUrl(product.image)}
+  alt={product.name}
+/>
             </Link>
           </SwiperSlide>
         </Swiper>
@@ -81,7 +82,7 @@ const SearchProductCard = ({ product }) => {
           )}
         </div>
 
-        {product.colors?.length > 0 && (
+        {/* {product.colors?.length > 0 && (
           <div className="colors">
             {product.colors.map((color, index) => (
               <span
@@ -93,7 +94,7 @@ const SearchProductCard = ({ product }) => {
               />
             ))}
           </div>
-        )}
+        )} */}
 
       </div>
     </div>

@@ -8,10 +8,13 @@ import { Navigation } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/navigation";
 import useWishlist from "../../hooks/useWishlist";
+import { getImageUrl } from "../../utils/imageHelper";
 
 const ProductListCard = ({ product }) => {
   const { addItem, wishlist, actionLoading } = useWishlist();
-  const isWishlisted = wishlist.items.some((item) => String(item.productId) === String(product.id));
+  const isWishlisted = wishlist.items.some(
+    (item) => String(item.productId) === String(product.id),
+  );
   const discount =
     product.discountPrice && product.discountPrice > product.price
       ? Math.round(
@@ -19,8 +22,6 @@ const ProductListCard = ({ product }) => {
             100,
         )
       : 0;
-
-
 
   return (
     <div className="product-card">
@@ -39,13 +40,18 @@ const ProductListCard = ({ product }) => {
           >
             {product.images?.map((image, index) => (
               <SwiperSlide key={index}>
-                <img src={image} alt={product.name} />
+                <img src={getImageUrl(image)} alt={product.name} />
               </SwiperSlide>
             ))}
           </Swiper>
         </Link>
 
-        <button className={`wishlist-btn ${isWishlisted ? "active" : ""}`} onClick={() => !isWishlisted && addItem(product)} disabled={actionLoading || isWishlisted} aria-label={isWishlisted ? "In wishlist" : "Add to wishlist"}>
+        <button
+          className={`wishlist-btn ${isWishlisted ? "active" : ""}`}
+          onClick={() => !isWishlisted && addItem(product)}
+          disabled={actionLoading || isWishlisted}
+          aria-label={isWishlisted ? "In wishlist" : "Add to wishlist"}
+        >
           <FaHeart />
         </button>
 
