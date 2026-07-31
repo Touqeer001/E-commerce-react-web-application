@@ -20,8 +20,8 @@ createRoot(document.getElementById('root')).render(
       </WishlistProvider>
     </CartProvider>
      <ToastContainer
-          position="top-right"
-          autoClose={2500}
+          position="top-left"
+          autoClose={500}
           hideProgressBar={false}
           newestOnTop
           closeOnClick

@@ -10,8 +10,12 @@ const ProductInfo = ({ product }) => {
   );
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(
-    product?.images?.[0] || ""
-  );
+  product.images?.[0]
+    ? product.images[0].startsWith("http")
+      ? product.images[0]
+      : `http://localhost:5000${product.images[0]}`
+    : ""
+);
 
   const { addToCart, actionLoading } = useCart();
   const { addItem, wishlist, actionLoading: wishlistLoading } = useWishlist();
@@ -88,17 +92,27 @@ const ProductInfo = ({ product }) => {
         </h4>
 
         <div className="color-variants">
-          {product.images?.map((img, index) => (
-            <div
-              key={index}
-              className={`variant-card ${selectedImage === img ? "active" : ""
-                }`}
-              onClick={() => setSelectedImage(img)}
-            >
-              <img src={img} alt={`${product.name}-${index}`} />
-            </div>
-          ))}
-        </div>
+  {product.images?.map((img, index) => {
+    const imageUrl = img.startsWith("http")
+      ? img
+      : `http://localhost:5000${img}`;
+
+    return (
+      <div
+        key={index}
+        className={`variant-card ${
+          selectedImage === imageUrl ? "active" : ""
+        }`}
+        onClick={() => setSelectedImage(imageUrl)}
+      >
+        <img
+          src={imageUrl}
+          alt={`${product.name}-${index}`}
+        />
+      </div>
+    );
+  })}
+</div>
       </div>
 
       {/* Size */}
