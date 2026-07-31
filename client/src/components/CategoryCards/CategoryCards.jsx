@@ -1,51 +1,52 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { getAllCategories } from "../../Services/api";
+import { getAllCategories } from "../Services/api";
 import "./CategoryCards.css";
 
 function CategoryCards() {
-  const [categories, setCategories] = useState([]);
 
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await getAllCategories();
+    const [categories, setCategories] = useState([]);
 
-        // MockAPI returns the array directly
-        setCategories(response.data);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
-      }
-    };
+     useEffect(() => {
+            const fetchCategories = async () => {
+                try {
+                    const response = await getAllCategories();
+                    setCategories(response.data.data);
+                } catch (error) {
+                    console.error(error);
+                }
+            };
+    
+            fetchCategories();
+        }, []);
 
-    fetchCategories();
-  }, []);
+    return (
 
-  return (
-    <>
-      <h2>Shop all</h2>
-    <section className="category-section">
-      <h2>Shop by Category</h2>
+        <section className="category-section">
 
-      <div className="category-container">
-        {categories.map((category) => (
-          <Link
-            key={category.id}
-            to={`/products`}
-            className="category-card"
-          >
-            <img
-              src={category.image}
-              alt={category.name}
-            />
+            <h2>Shop by Category</h2>
 
-            <p>{category.name}</p>
-          </Link>
-        ))}
-      </div>
-    </section>
-    </>
-  );
+            <div className="category-container">
+
+                {categories.map(category => (
+
+                    <div className="category-card" key={category.id}>
+
+                        <img
+                            src={category.image}
+                            alt={category.name}
+                        />
+
+                        <p>{category.name}</p>
+
+                    </div>
+
+                ))}
+
+            </div>
+
+        </section>
+
+    );
 }
 
 export default CategoryCards;

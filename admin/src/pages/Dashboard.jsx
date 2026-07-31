@@ -68,7 +68,11 @@ export function Table({ title, rows, cols }) {
                 <tr key={row.id || i}>
                   {cols.map((c) => (
                     <td key={c[0]}>
-                      {c[0] === "total" ? `₹${row[c[0]]}` : row[c[0]] || "—"}
+                      {c[2]
+                        ? c[2](row)
+                        : c[0] === "total"
+                          ? `₹${row[c[0]]}`
+                          : row[c[0]] || "—"}
                     </td>
                   ))}
                 </tr>
