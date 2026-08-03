@@ -44,6 +44,7 @@ const app = express();
 const CLIENT_URL = [
   "http://localhost:5173", // Customer App
   "http://localhost:5174", // Admin App
+   "https://littletrendz.netlify.app",
 ];
 
 // Middleware
