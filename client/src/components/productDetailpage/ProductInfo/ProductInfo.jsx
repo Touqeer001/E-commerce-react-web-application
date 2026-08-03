@@ -13,7 +13,7 @@ const ProductInfo = ({ product }) => {
   product.images?.[0]
     ? product.images[0].startsWith("http")
       ? product.images[0]
-      : `http://localhost:5000${product.images[0]}`
+      : `${import.meta.env.VITE_API_URL}${product.images[0]}`
     : ""
 );
 
@@ -95,7 +95,7 @@ const ProductInfo = ({ product }) => {
   {product.images?.map((img, index) => {
     const imageUrl = img.startsWith("http")
       ? img
-      : `http://localhost:5000${img}`;
+      : `https://e-commerce-react-web-application.onrender.com${img}`;
 
     return (
       <div

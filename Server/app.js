@@ -35,9 +35,9 @@ try {
 }
 
 
-console.log("Merchant ID:", process.env.BRAINTREE_MERCHANT_ID);
-console.log("Public Key:", process.env.BRAINTREE_PUBLIC_KEY);
-console.log("Private Key:", process.env.BRAINTREE_PRIVATE_KEY);
+// console.log("Merchant ID:", process.env.BRAINTREE_MERCHANT_ID);
+// console.log("Public Key:", process.env.BRAINTREE_PUBLIC_KEY);
+// console.log("Private Key:", process.env.BRAINTREE_PRIVATE_KEY);
 
 const app = express();
 

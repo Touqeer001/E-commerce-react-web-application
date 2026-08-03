@@ -160,7 +160,7 @@ export function Products() {
                           className="thumb"
                           src={
                             row.image.startsWith("/")
-                              ? `http://localhost:5000${row.image}`
+                              ? `${import.meta.env.VITE_API_URL}${row.image}`
                               : row.image
                           }
                           alt=""

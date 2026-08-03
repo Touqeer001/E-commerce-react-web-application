@@ -27,7 +27,7 @@ function Navbar() {
   const [activeMenu, setActiveMenu] = useState(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
-  const cartCount = cart.items.reduce(
+  const cartCount = cart?.items.reduce(
     (total, item) => total + item.quantity,
     0,
   );
@@ -115,7 +115,7 @@ function Navbar() {
 
           <Link to="/wishlist" className="icon-btn wishlist-icon" aria-label="Wishlist">
             <FaRegHeart />
-            {wishlist.count > 0 && <span className="cart-count">{wishlist.count}</span>}
+            {wishlist?.count > 0 && <span className="cart-count">{wishlist?.count}</span>}
           </Link>
 
           <Link to="/cart" className="icon-btn cart-icon">

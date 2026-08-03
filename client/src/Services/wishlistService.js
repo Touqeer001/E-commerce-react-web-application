@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:5000/wishlist";
+const BASE_URL = `${import.meta.env.VITE_API_URL}/wishlist`;
 
 export const getWishlist = () => axios.get(BASE_URL);
 // Keep the exact product selected in the listing. The backend stores this mock

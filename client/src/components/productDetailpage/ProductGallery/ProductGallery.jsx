@@ -12,7 +12,7 @@ const ProductGallery = ({ images = [], productName }) => {
         {images.map((image, index) => {
           const imageUrl = image.startsWith("http")
             ? image
-            : `http://localhost:5000${image}`;
+            : `${import.meta.env.VITE_API_URL}${image}`;
 
           return (
             <div className="gallery-item" key={index}>
