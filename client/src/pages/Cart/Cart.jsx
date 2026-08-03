@@ -3,7 +3,7 @@ import "./Cart.css";
 import useCart from "../../hooks/useCart";
 
 import CartItem from "../../components/Cart/CartItem/CartItem";
-import CartSummary from "../../components/cart/CartSummary/CartSummary";
+import CartSummary from "../../components/Cart/CartSummary/CartSummary";
 import EmptyCart from "../../components/Cart/EmptyCart/EmptyCart";
 import Loader from "../../components/Loader/Loader";
 

@@ -9,7 +9,7 @@ import {
   updateCartQuantity,
   removeCartItem,
   clearCart as clearCartAPI,
-} from "../services/cartService";
+} from "../Services/cartService";
 
 const CartProvider = ({ children }) => {
   const [cart, setCart] = useState({
