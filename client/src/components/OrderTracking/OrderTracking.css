@@ -59,4 +59,9 @@
 .order-tracking-step--current .order-tracking-step__content strong { color: #1d4ed8; }
 .order-tracking-step--current .order-tracking-step__content span { color: #2563eb; font-weight: 600; }
 @keyframes tracking-pulse { 50% { box-shadow: 0 0 0 6px rgba(37, 99, 235, .16); } }
-@media (max-width: 520px) { .order-tracking-card { padding: 18px; } .order-tracking-card__heading { align-items: flex-start; flex-direction: column; } }
+@media (max-width: 520px) {
+  .order-tracking-card { padding: 18px; }
+  .order-tracking-card__heading,
+  .order-tracking-progress__labels { align-items: flex-start; flex-direction: column; }
+  .order-tracking-progress__labels { gap: 6px; }
+}

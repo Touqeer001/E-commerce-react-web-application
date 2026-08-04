@@ -2,7 +2,7 @@
   width: 100%;
   max-width: 1390px;
   margin: 0 auto;
-  padding: 30px 50px 60px;
+  padding: 30px clamp(16px, 4vw, 50px) 60px;
 }
 
 .plp-header {
@@ -13,7 +13,7 @@
 }
 
 .plp-header h2 {
-  font-size: 30px;
+  font-size: clamp(24px, 3vw, 30px);
   font-weight: 700;
   margin-bottom: 5px;
 }
@@ -36,11 +36,11 @@
 }
 
 .loading {
-  height: 500px;
+  min-height: 360px;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 20px;
+  font-size: clamp(17px, 2vw, 20px);
   font-weight: 600;
 }
 
@@ -75,10 +75,6 @@
 
 @media (max-width: 480px) {
   .plp-container {
-    padding: 20px 15px 40px;
-  }
-
-  .plp-header h2 {
-    font-size: 24px;
+    padding: 20px 14px 40px;
   }
 }

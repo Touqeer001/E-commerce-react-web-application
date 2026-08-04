@@ -16,6 +16,7 @@
     outline: none;
     cursor: pointer;
     min-width: 220px;
+    min-height: 44px;
     background: #fff;
 }
 
@@ -27,7 +28,19 @@
     }
 
     .sort-dropdown select {
-        width: 180px;
+        width: min(58vw, 220px);
+        min-width: 0;
     }
 
+}
+
+@media (max-width:420px) {
+    .sort-dropdown {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .sort-dropdown select {
+        width: 100%;
+    }
 }

@@ -25,7 +25,7 @@
 
 .tracking-order-header h1 {
     margin: 0 0 7px;
-    font-size: 1.7rem;
+    font-size: clamp(1.4rem, 3vw, 1.7rem);
 }
 
 .tracking-order-header span {
@@ -39,6 +39,7 @@
     border-radius: 8px;
     padding: 10px 14px;
     cursor: pointer;
+    min-height: 44px;
 }
 
 .tracking-card,
@@ -57,6 +58,7 @@
 .tracking-meta {
     display: flex;
     gap: 56px;
+    flex-wrap: wrap;
     padding-bottom: 22px;
     border-bottom: 1px solid #eee;
 }
@@ -138,7 +140,7 @@
 
 .order-grid {
     display: grid;
-    grid-template-columns: 1.55fr 1fr;
+    grid-template-columns: minmax(0, 1.55fr) minmax(280px, 1fr);
     gap: 20px;
 }
 
@@ -207,6 +209,7 @@
     gap: 14px;
     padding: 12px 0;
     border-top: 1px solid #eee;
+    min-width: 0;
 }
 
 .product img {
@@ -216,16 +219,17 @@
     border-radius: 6px;
 }
 
-.product-info {
+.order-details-page .product-info {
     flex: 1;
+    min-width: 0;
 }
 
-.product-info h3 {
+.order-details-page .product-info h3 {
     margin: 0;
     font-size: .95rem;
 }
 
-.product-info p {
+.order-details-page .product-info p {
     font-size: .83rem;
 }
 
@@ -255,6 +259,7 @@
     padding: 12px 18px;
     font-weight: 700;
     cursor: pointer;
+    min-height: 44px;
 }
 
 .cancel-btn {
@@ -299,24 +304,31 @@
     }
 
     .tracking-progress {
-        overflow-x: auto;
-        justify-content: flex-start;
-        gap: 23px;
-        padding-bottom: 8px;
+        flex-direction: column;
+        gap: 18px;
+        margin-left: 4px;
+        padding-left: 18px;
     }
 
     .tracking-progress:before {
-        width: 370px;
+        width: 4px;
+        height: calc(100% - 36px);
         right: auto;
         left: 32px;
+        top: 18px;
     }
 
     .tracking-step {
-        min-width: 85px;
+        min-width: 0;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        text-align: left;
     }
 
     .tracking-step p {
-        margin: 8px -10px 0;
+        margin: 0;
     }
 
     .order-grid {
@@ -337,5 +349,25 @@
 
     .product {
         align-items: flex-start;
+    }
+}
+
+@media (max-width:480px) {
+    .product {
+        flex-wrap: wrap;
+    }
+
+    .product img {
+        width: 64px;
+        height: 64px;
+    }
+
+    .product strong {
+        width: 100%;
+        text-align: right;
+    }
+
+    .btns button {
+        flex-basis: 100%;
     }
 }

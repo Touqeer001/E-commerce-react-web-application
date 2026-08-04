@@ -7,6 +7,8 @@ import {
   FaSignOutAlt,
   FaUserCircle,
   FaRegHeart,
+  FaBars,
+  FaTimes,
 } from "react-icons/fa";
 
 import "./Navbar.css";
@@ -26,6 +28,7 @@ function Navbar() {
 
   const [activeMenu, setActiveMenu] = useState(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const cartCount = cart?.items.reduce(
     (total, item) => total + item.quantity,
@@ -35,20 +38,30 @@ function Navbar() {
   return (
     <div className="navbar-wrapper" onMouseLeave={() => setActiveMenu(null)}>
       <nav className="navbar">
+        <button
+          className="mobile-menu-toggle"
+          type="button"
+          aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-expanded={isMobileMenuOpen}
+          onClick={() => setIsMobileMenuOpen((isOpen) => !isOpen)}
+        >
+          {isMobileMenuOpen ? <FaTimes /> : <FaBars />}
+        </button>
+
         {/* LEFT */}
-        <div className="nav-left">
+        <div className={`nav-left ${isMobileMenuOpen ? "open" : ""}`}>
           <div
             className="nav-item"
             onMouseEnter={() => setActiveMenu(megaMenu[0])}
           >
-            <Link to="/products?category=Babies">BABY</Link>
+            <Link to="/products?category=Babies" onClick={() => setIsMobileMenuOpen(false)}>BABY</Link>
           </div>
 
           <div
             className="nav-item"
             onMouseEnter={() => setActiveMenu(megaMenu[1])}
           >
-            <Link to="/products?category=Boys">BABA</Link>
+            <Link to="/products?category=Boys" onClick={() => setIsMobileMenuOpen(false)}>BABA</Link>
           </div>
 
           {/* <div className="dropdown">
