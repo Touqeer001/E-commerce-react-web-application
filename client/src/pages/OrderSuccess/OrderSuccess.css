@@ -4,7 +4,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 50px 20px;
+  padding: clamp(28px, 6vw, 50px) 14px;
 }
 
 .order-success-card {
@@ -12,14 +12,14 @@
   max-width: 500px;
   background: #fff;
   border-radius: 16px;
-  padding: 40px;
+  padding: clamp(24px, 5vw, 40px);
   text-align: center;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
 }
 
 .success-icon {
-  width: 90px;
-  height: 90px;
+  width: clamp(72px, 16vw, 90px);
+  height: clamp(72px, 16vw, 90px);
   background: #28a745;
   color: #fff;
   border-radius: 50%;
@@ -27,11 +27,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 42px;
+  font-size: clamp(34px, 8vw, 42px);
 }
 
 .order-success-card h1 {
-  font-size: 2rem;
+  font-size: clamp(1.6rem, 5vw, 2rem);
   margin-bottom: 12px;
   color: #222;
 }
@@ -110,7 +110,8 @@
 .primary-btn,
 .secondary-btn {
   width: 100%;
-  padding: 15px;
+  min-height: 50px;
+  padding: 14px 15px;
   border-radius: 10px;
   font-size: 16px;
   font-weight: 600;
@@ -155,6 +156,7 @@
 
   .delivery-box {
     padding: 15px;
+    align-items: flex-start;
   }
 
   .truck-icon {

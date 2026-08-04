@@ -33,7 +33,7 @@ function HeroCarousel() {
             navigation
             loop
         >
-            {banners.map((banner) => (
+            {banners?.map((banner) => (
                 <SwiperSlide key={banner.id}>
                     <div
                         className="hero-slide"

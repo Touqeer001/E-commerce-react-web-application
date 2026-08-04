@@ -1,15 +1,15 @@
 .cart-page{
     max-width:1400px;
-    margin:50px auto;
-    padding:0 20px;
+    margin:clamp(28px, 4vw, 50px) auto;
+    padding:0 clamp(14px, 3vw, 20px);
 
     display:grid;
-    grid-template-columns:2fr 400px;
+    grid-template-columns:minmax(0, 2fr) minmax(320px, 400px);
     gap:35px;
 }
 
 .cart-title{
-    font-size:30px;
+    font-size:clamp(24px, 3vw, 30px);
     margin-bottom:30px;
     color:#222;
 }
@@ -24,6 +24,13 @@
 
 .cart-page{
     grid-template-columns:1fr;
+    gap:24px;
 }
 
+}
+
+@media(max-width:640px){
+    .cart-page{
+        margin:24px auto 36px;
+    }
 }

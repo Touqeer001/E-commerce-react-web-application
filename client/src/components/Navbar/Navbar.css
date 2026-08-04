@@ -8,6 +8,19 @@
   background: #fff;
 }
 
+.mobile-menu-toggle {
+  display: none;
+  border: none;
+  background: none;
+  color: #222;
+  cursor: pointer;
+  font-size: 22px;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+}
+
 /* LEFT */
 
 .nav-left {
@@ -101,6 +114,11 @@
   cursor: pointer;
   font-size: 22px;
   position: relative;
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .cart-icon {
@@ -214,4 +232,135 @@
 
 .nav-item:hover a {
   color: #ff6b6b;
+}
+
+@media (max-width: 1023px) {
+  .navbar {
+    padding: 0 24px;
+  }
+
+  .nav-center h1 {
+    font-size: clamp(28px, 4vw, 34px);
+  }
+
+  .nav-right {
+    gap: 14px;
+  }
+
+  .search-box {
+    width: 180px;
+  }
+}
+
+@media (max-width: 767px) {
+  .navbar {
+    height: 72px;
+    padding: 0 12px;
+    position: relative;
+  }
+
+  .mobile-menu-toggle {
+    display: inline-flex;
+    flex: 0 0 44px;
+    z-index: 1002;
+  }
+
+  .nav-left {
+    position: fixed;
+    top: 72px;
+    left: 0;
+    width: min(82vw, 320px);
+    height: calc(100vh - 72px);
+    background: #fff;
+    border-right: 1px solid #ececec;
+    box-shadow: 12px 0 30px rgba(0, 0, 0, 0.08);
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    gap: 0;
+    padding: 18px 20px;
+    transform: translateX(-105%);
+    transition: transform 0.3s ease;
+    z-index: 1001;
+  }
+
+  .nav-left.open {
+    transform: translateX(0);
+  }
+
+  .nav-item {
+    height: auto;
+    border-bottom: 1px solid #f1f1f1;
+  }
+
+  .nav-item a {
+    width: 100%;
+    min-height: 50px;
+    justify-content: flex-start;
+  }
+
+  .nav-center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(48vw, 210px);
+  }
+
+  .nav-center h1 {
+    font-size: clamp(20px, 6vw, 28px);
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+
+  .nav-center span {
+    font-size: 10px;
+  }
+
+  .nav-right {
+    flex: 0 0 auto;
+    gap: 4px;
+    margin-left: auto;
+  }
+
+  .search-box {
+    width: 44px;
+    min-height: 44px;
+    justify-content: center;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .search-box input {
+    display: none;
+  }
+
+  .account-dropdown {
+    right: -58px;
+  }
+
+  .navbar-wrapper .mega-menu {
+    display: none;
+  }
+}
+
+@media (max-width: 380px) {
+  .navbar {
+    padding: 0 8px;
+  }
+
+  .nav-center {
+    width: 150px;
+  }
+
+  .nav-center h1 {
+    font-size: 19px;
+  }
+
+  .nav-center span {
+    display: none;
+  }
+
+  .nav-right {
+    gap: 0;
+  }
 }

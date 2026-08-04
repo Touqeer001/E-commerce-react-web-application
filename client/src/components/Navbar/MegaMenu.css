@@ -9,6 +9,7 @@
   padding: 40px 60px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
   z-index: 1000;
+  overflow-x: hidden;
 }
 
 .mega-left {
@@ -38,10 +39,11 @@
   flex: 1;
   display: flex;
   gap: 25px;
+  min-width: 0;
 }
 
 .mega-card {
-  width: 240px;
+  width: min(240px, 24vw);
   cursor: pointer;
 }
 
@@ -60,4 +62,15 @@
   text-align: center;
   margin-top: 12px;
   font-weight: 600;
+}
+
+@media(max-width:1023px){
+  .mega-menu{
+    gap:30px;
+    padding:32px 28px;
+  }
+
+  .mega-card img{
+    height:260px;
+  }
 }

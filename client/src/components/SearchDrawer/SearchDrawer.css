@@ -21,8 +21,8 @@
     overflow-x: hidden;
   position: fixed;
   top: 0;
-  right: -450px;
-  width: 450px;
+  right: min(-450px, -100vw);
+  width: min(450px, 100vw);
   height: 100vh;
   background: white;
   transition: 0.35s ease;
@@ -63,6 +63,8 @@
   border: none;
   font-size: 22px;
   cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .drawer-content {
@@ -133,6 +135,9 @@
     border-radius:30px;
     text-decoration:none;
     color:#111;
+    min-height:44px;
+    display:inline-flex;
+    align-items:center;
 }
 
 .search-loading{
@@ -177,9 +182,28 @@
     background:#fff;
     cursor:pointer;
     transition:.3s;
+    min-height:44px;
 }
 
 .search-tags button:hover{
     background:#111;
     color:#fff;
+}
+
+@media(max-width:520px){
+    .drawer-header{
+        padding:16px 14px;
+    }
+
+    .drawer-content{
+        padding:14px;
+    }
+
+    .suggested-products{
+        grid-template-columns:1fr;
+    }
+
+    .close-btn{
+        margin-left:10px;
+    }
 }

@@ -1,7 +1,7 @@
 .hero-categories {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  height: calc(100vh - 80px);
+  min-height: calc(100vh - 80px);
 }
 
 .hero-card {
@@ -33,7 +33,38 @@
 
 .hero-overlay h2 {
   color: white;
-  font-size: 3rem;
+  font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 700;
   letter-spacing: 2px;
+  text-align: center;
+}
+
+@media (max-width: 1023px) {
+  .hero-categories {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    min-height: 620px;
+  }
+
+  .hero-overlay {
+    padding: 0 16px 36px;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-categories {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+
+  .hero-card {
+    min-height: clamp(220px, 45vh, 360px);
+  }
+
+  .hero-card img {
+    height: 100%;
+  }
+
+  .hero-overlay {
+    padding-bottom: 30px;
+  }
 }
