@@ -139,8 +139,8 @@ export const getCookieValue = (req, name) => {
 export const setSessionCookie = (res, sessionId) => {
   res.cookie(SESSION_COOKIE, sessionId, {
     httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure: true,
+    sameSite: "none",
     maxAge: SESSION_MAX_AGE_SECONDS * 1000,
   });
 };

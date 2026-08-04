@@ -16,6 +16,7 @@ export const optionalAuth = (req, res, next) => {
 
 export const requireAuth = (req, res, next) => {
   optionalAuth(req, res, () => {
+      console.log("Cookies:", req.headers.cookie);
     if (!req.user) {
       return res.status(401).json({
         success: false,
