@@ -108,20 +108,20 @@ export const createSession = (user) => {
     createdAt: Date.now(),
   });
 
+  console.log("Sessions after login:", sessions.size);
+
   return sessionId;
 };
 
 export const getSessionUser = (sessionId) => {
-  if (!sessionId) {
-    return null;
-  }
+  console.log("Session ID:", sessionId);
+  console.log("Sessions size:", sessions.size);
 
   const session = sessions.get(sessionId);
-  if (!session) {
-    return null;
-  }
 
-  return users.get(session.userId) || null;
+  console.log("Session:", session);
+
+  
 };
 
 export const deleteSession = (sessionId) => {
