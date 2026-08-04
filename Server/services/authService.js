@@ -114,14 +114,22 @@ export const createSession = (user) => {
 };
 
 export const getSessionUser = (sessionId) => {
-  console.log("Session ID:", sessionId);
-  console.log("Sessions size:", sessions.size);
+  if (!sessionId) {
+    return null;
+  }
 
   const session = sessions.get(sessionId);
-
   console.log("Session:", session);
 
-  
+  if (!session) {
+    return null;
+  }
+
+  console.log("User ID:", session.userId);
+  console.log("Users Map Size:", users.size);
+  console.log("User from Map:", users.get(session.userId));
+
+  return users.get(session.userId) || null;
 };
 
 export const deleteSession = (sessionId) => {
