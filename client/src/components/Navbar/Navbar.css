@@ -301,7 +301,7 @@
 
   .nav-center {
     position: absolute;
-    left: 50%;
+    left: 34%;
     transform: translateX(-50%);
     width: min(48vw, 210px);
   }
