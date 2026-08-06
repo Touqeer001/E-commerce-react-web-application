@@ -114,6 +114,27 @@
     min-width:0;
 }
 
+.form-field {
+    display:flex;
+    flex-direction:column;
+    min-width:0;
+}
+
+.address-form .input-error {
+    border-color:#dc2626;
+    background:#fef2f2;
+}
+
+.address-form .input-error:focus {
+    outline-color:#dc2626;
+}
+
+.field-error {
+    color:#dc2626;
+    font-size:12.5px;
+    margin-top:5px;
+}
+
 .address-form textarea{
 
     grid-column:1/3;

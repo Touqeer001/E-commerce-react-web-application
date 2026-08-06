@@ -83,6 +83,10 @@ const CartProvider = ({ children }) => {
 
   // Update Quantity
   const updateQuantity = async (cartId, quantity) => {
+    if (Number(quantity) < 1) {
+      return removeItem(cartId);
+    }
+
     setActionLoading(true);
 
     try {

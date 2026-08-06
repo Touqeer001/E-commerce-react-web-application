@@ -45,6 +45,7 @@ export const addToCart = async ({
   size,
   color,
 }) => {
+  const qty = Math.max(1, Number(quantity) || 1);
 
   const [product] = await db.query(
     `
@@ -78,7 +79,7 @@ export const addToCart = async ({
       SET quantity = quantity + ?
       WHERE id = ?
       `,
-      [quantity, existing[0].id]
+      [qty, existing[0].id]
     );
 
     return {
@@ -99,7 +100,7 @@ export const addToCart = async ({
     `,
     [
       productId,
-      quantity,
+      qty,
       size,
       color,
     ]
@@ -108,7 +109,7 @@ export const addToCart = async ({
   return {
     cartId: result.insertId,
     productId,
-    quantity,
+    quantity: qty,
     size,
     color,
   };
@@ -116,18 +117,36 @@ export const addToCart = async ({
 
 // Update Quantity
 export const updateQuantity = async (cartId, quantity) => {
+  const qty = Number(quantity);
+
+  if (!Number.isInteger(qty) || qty < 1) {
+    await db.query(
+      `
+      DELETE FROM cart
+      WHERE id = ?
+      `,
+      [cartId]
+    );
+
+    return {
+      cartId,
+      removed: true,
+    };
+  }
+
   await db.query(
     `
     UPDATE cart
     SET quantity = ?
     WHERE id = ?
     `,
-    [quantity, cartId]
+    [qty, cartId]
   );
 
   return {
     cartId,
-    quantity,
+    quantity: qty,
+    removed: false,
   };
 };
 

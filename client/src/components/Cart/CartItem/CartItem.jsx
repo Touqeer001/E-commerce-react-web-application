@@ -6,6 +6,14 @@ import { getImageUrl } from "../../../utils/imageHelper";
 const CartItem = ({ item }) => {
   const { updateQuantity, removeItem } = useCart();
 
+  const decreaseQuantity = () => {
+    if (item.quantity <= 1) {
+      removeItem(item.cartId);
+    } else {
+      updateQuantity(item.cartId, item.quantity - 1);
+    }
+  };
+
   return (
     <div className="cart-item">
       <img src={getImageUrl(item.image)} alt={item.name} />
@@ -25,7 +33,7 @@ const CartItem = ({ item }) => {
       </div>
 
       <div className="qty-box">
-        <button onClick={() => updateQuantity(item.cartId, item.quantity - 1)}>
+        <button onClick={decreaseQuantity}>
           -
         </button>
 
