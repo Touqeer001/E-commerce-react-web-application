@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const Checkout = () => {
-  const { cart } = useCart();
+  const { cart, clearCart } = useCart();
   const { user } = useAuth();
   const [clientToken, setClientToken] = useState("");
   const [instance, setInstance] = useState(null);
@@ -228,8 +228,7 @@ const Checkout = () => {
     });
 
 
-    // Clear Cart
-  
+    await clearCart();
 
     toast.success("Order Placed Successfully");
 
