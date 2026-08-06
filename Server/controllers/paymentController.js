@@ -1,4 +1,5 @@
 import gateway from "../config/braintree.js";
+import { validateDeliveryAddress } from "../middleware/validateDeliveryAddress.js";
 
 export const generateClientToken = async (req, res) => {
   try {
@@ -22,9 +23,18 @@ export const generateClientToken = async (req, res) => {
 export const processPayment = async (req, res) => {
   try {
      console.log("Request Body:", req.body);
-    const { nonce, amount } = req.body;
+    const { nonce, amount, address } = req.body;
       console.log("Nonce:", nonce);
   console.log("Amount:", amount);
+
+    const validation = validateDeliveryAddress(address);
+    if (!validation.isValid) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid delivery address",
+        errors: validation.errors,
+      });
+    }
 
     if (!nonce || !amount) {
       return res.status(400).json({

@@ -15,6 +15,39 @@ export const createOrder = async (req, res) => {
       items,
     } = req.body;
 
+    const orderErrors = {};
+    if (!user_id) {
+      orderErrors.user_id = "User id is required.";
+    }
+    if (!address_id) {
+      orderErrors.address_id = "A valid delivery address is required.";
+    }
+    if (total === undefined || total === null || isNaN(Number(total))) {
+      orderErrors.total = "Order total is required.";
+    }
+    if (!Array.isArray(items) || items.length === 0) {
+      orderErrors.items = "Order items are required.";
+    }
+
+    if (Object.keys(orderErrors).length > 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid order data",
+        errors: orderErrors,
+      });
+    }
+
+    const [addressRows] = await pool.query(
+      "SELECT id FROM addresses WHERE id = ?",
+      [address_id]
+    );
+    if (addressRows.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Delivery address not found. Please provide a valid delivery address.",
+      });
+    }
+
     const [orderResult] = await pool.query(
       `INSERT INTO orders
       (user_id, address_id, subtotal, tax, shipping, total, payment_status, order_status)

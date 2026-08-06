@@ -1,4 +1,5 @@
 import pool from "../config/db.js";
+import { validateDeliveryAddress } from "../middleware/validateDeliveryAddress.js";
 
 // Add Address
 export const addAddress = async (req, res) => {
@@ -7,12 +8,31 @@ export const addAddress = async (req, res) => {
       user_id,
       first_name,
       last_name,
+      email,
       phone,
       city,
       state,
       pincode,
       country,
     } = req.body;
+
+    const validation = validateDeliveryAddress({
+      first_name,
+      last_name,
+      email,
+      phone,
+      city,
+      state,
+      pincode,
+      country,
+    });
+    if (!validation.isValid) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid delivery address",
+        errors: validation.errors,
+      });
+    }
 
     const [result] = await pool.query(
       `INSERT INTO addresses

@@ -37,10 +37,11 @@ export const createOrder = (data) =>
 
 export const getClientToken = () => api.get("/payment/token");
 
-export const processPayment = ({ nonce, amount }) =>
+export const processPayment = ({ nonce, amount, address }) =>
   api.post("/payment/checkout", {
     nonce,
     amount,
+    address,
   }) 
 
   //Search

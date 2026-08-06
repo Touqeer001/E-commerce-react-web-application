@@ -144,20 +144,21 @@ export const getCookieValue = (req, name) => {
   return cookie ? decodeURIComponent(cookie.split("=")[1]) : null;
 };
 
+const isProduction = process.env.NODE_ENV === "production";
+
 export const setSessionCookie = (res, sessionId) => {
   res.cookie(SESSION_COOKIE, sessionId, {
     httpOnly: true,
-    secure: true,
-    sameSite: "none",
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
     maxAge: SESSION_MAX_AGE_SECONDS * 1000,
   });
 };
-
 export const clearSessionCookie = (res) => {
   res.clearCookie(SESSION_COOKIE, {
     httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
   });
 };
 
