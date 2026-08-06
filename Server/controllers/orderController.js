@@ -3,8 +3,16 @@ import pool from "../config/db.js";
 // Create Order
 export const createOrder = async (req, res) => {
   try {
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Login required",
+      });
+    }
+
     const {
-      user_id,
       address_id,
       subtotal,
       tax,
@@ -16,9 +24,6 @@ export const createOrder = async (req, res) => {
     } = req.body;
 
     const orderErrors = {};
-    if (!user_id) {
-      orderErrors.user_id = "User id is required.";
-    }
     if (!address_id) {
       orderErrors.address_id = "A valid delivery address is required.";
     }
@@ -38,8 +43,8 @@ export const createOrder = async (req, res) => {
     }
 
     const [addressRows] = await pool.query(
-      "SELECT id FROM addresses WHERE id = ?",
-      [address_id]
+      "SELECT id FROM addresses WHERE id = ? AND user_id = ?",
+      [address_id, userId]
     );
     if (addressRows.length === 0) {
       return res.status(400).json({
@@ -53,7 +58,7 @@ export const createOrder = async (req, res) => {
       (user_id, address_id, subtotal, tax, shipping, total, payment_status, order_status)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
       [
-        user_id,
+        userId,
         address_id,
         subtotal,
         tax,
@@ -80,17 +85,20 @@ export const createOrder = async (req, res) => {
       );
     }
 
+    console.log(`Order created: id=${orderId} user_id=${userId}`);
+
     res.status(201).json({
       success: true,
       message: "Order placed successfully",
       orderId,
     });
   } catch (error) {
-    console.error(error);
+    console.error("createOrder error:", error);
 
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Failed to place order",
+      error: error.message,
     });
   }
 };
@@ -119,6 +127,15 @@ export const getOrders = async (req, res) => {
 // Get Order By ID
 export const getOrderById = async (req, res) => {
   try {
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Login required",
+      });
+    }
+
     const { orderId } = req.params;
 
     const [orders] = await pool.query(
@@ -136,9 +153,9 @@ export const getOrderById = async (req, res) => {
       FROM orders o
       LEFT JOIN addresses a
       ON o.address_id = a.id
-      WHERE o.id = ?
+      WHERE o.id = ? AND o.user_id = ?
       `,
-      [orderId]
+      [orderId, userId]
     );
 
     if (orders.length === 0) {
@@ -199,7 +216,14 @@ export const getOrderById = async (req, res) => {
 
 export const getOrdersByUser = async (req, res) => {
   try {
-    const { userId } = req.params;
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Login required",
+      });
+    }
 
     const [orders] = await pool.query(
       `
@@ -232,16 +256,19 @@ export const getOrdersByUser = async (req, res) => {
       [userId]
     );
 
+    console.log(`Fetched ${orders.length} order row(s) for user_id=${userId}`);
+
     res.status(200).json({
       success: true,
       orders,
     });
   } catch (error) {
-    console.error(error);
+    console.error("getOrdersByUser error:", error);
 
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Failed to fetch orders",
+      error: error.message,
     });
   }
 };

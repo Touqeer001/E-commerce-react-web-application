@@ -1,14 +1,11 @@
 import {
   buildGoogleAuthUrl,
-  clearSessionCookie,
-  createSession,
-  deleteSession,
   exchangeGoogleCode,
   readRedirectFromState,
-  setSessionCookie,
+  signToken,
 } from "../services/authService.js";
 
-const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:5173";
+const CLIENT_URL =  "http://localhost:5173";
 
 export const startGoogleLogin = (req, res) => {
   try {
@@ -27,10 +24,12 @@ export const completeGoogleLogin = async (req, res) => {
 
   try {
     const user = await exchangeGoogleCode(req.query.code);
-    const sessionId = createSession(user);
+    const token = signToken(user);
 
-    setSessionCookie(res, sessionId);
-    res.redirect(`${CLIENT_URL}${redirectPath}`);
+    console.log(`Login complete for user_id=${user.id}`);
+
+    const separator = redirectPath.includes("?") ? "&" : "?";
+    res.redirect(`${CLIENT_URL}${redirectPath}${separator}token=${token}`);
   } catch (error) {
     res.redirect(`${CLIENT_URL}/login?error=${encodeURIComponent(error.message)}&redirect=${encodeURIComponent(redirectPath)}`);
   }
@@ -44,9 +43,6 @@ export const getCurrentUser = (req, res) => {
 };
 
 export const logout = (req, res) => {
-  deleteSession(req.sessionId);
-  clearSessionCookie(res);
-
   res.status(200).json({
     success: true,
     message: "Logged out successfully",

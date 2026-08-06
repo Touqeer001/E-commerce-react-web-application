@@ -135,6 +135,21 @@
     margin-top:5px;
 }
 
+.payment-error {
+    color: #dc2626;
+    font-size: 13.5px;
+    margin-top: 15px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 6px;
+    padding: 10px 12px;
+}
+
+.place-order-btn:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+}
+
 .address-form textarea{
 
     grid-column:1/3;

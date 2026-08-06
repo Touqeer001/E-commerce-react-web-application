@@ -31,7 +31,7 @@ function HeroCarousel() {
         <Swiper
             modules={[Navigation]}
             navigation
-            loop
+            loop={banners.length > 1}
         >
             {banners?.map((banner) => (
                 <SwiperSlide key={banner.id}>

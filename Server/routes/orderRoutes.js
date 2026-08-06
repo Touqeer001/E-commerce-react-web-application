@@ -15,7 +15,7 @@ router.post("/", requireAuth, createOrder);
 // Get all orders
 router.get("/", requireAuth, getOrders);
 
-router.get("/user/:userId", getOrdersByUser);
+router.get("/user/:userId", requireAuth, getOrdersByUser);
 // Get single order
 router.get("/:orderId", requireAuth, getOrderById);
 

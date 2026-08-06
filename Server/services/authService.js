@@ -1,10 +1,17 @@
-import crypto from "crypto";
+import jwt from "jsonwebtoken";
+import pool from "../config/db.js";
 
-const sessions = new Map();
-const users = new Map();
+const TOKEN_COOKIE = "lt_token";
 
-const SESSION_COOKIE = "lt_session";
-const SESSION_MAX_AGE_SECONDS = 7 * 24 * 60 * 60;
+const getJwtSecret = () => {
+  const secret = process.env.JWT_SECRET;
+
+  if (!secret) {
+    throw new Error("JWT_SECRET is not configured");
+  }
+
+  return secret;
+};
 
 const safeRedirect = (redirect) => {
   if (!redirect || typeof redirect !== "string") {
@@ -88,53 +95,110 @@ export const exchangeGoogleCode = async (code) => {
 
   const profile = await profileResponse.json();
 
+  const [result] = await pool.query(
+    `INSERT INTO users (google_id, name, email, profile_image)
+     VALUES (?, ?, ?, ?)
+     AS new
+     ON DUPLICATE KEY UPDATE
+       name = new.name,
+       email = new.email,
+       profile_image = new.profile_image`,
+    [profile.sub, profile.name, profile.email, profile.picture]
+  );
+
+  console.log("Upsert result:", { affectedRows: result.affectedRows });
+
+  const [rows] = await pool.query(
+    "SELECT id, google_id, name, email, profile_image FROM users WHERE google_id = ?",
+    [profile.sub]
+  );
+
+  if (rows.length === 0) {
+    throw new Error("Failed to create or find user after Google login");
+  }
+
+  const dbUser = rows[0];
+
   const user = {
-    id: profile.sub,
-    name: profile.name,
-    email: profile.email,
-    picture: profile.picture,
+    id: dbUser.id,
+    google_id: dbUser.google_id,
+    name: dbUser.name,
+    email: dbUser.email,
+    picture: dbUser.profile_image,
     provider: "google",
   };
 
-  users.set(user.id, user);
+  console.log("Authenticated user:", user);
+
   return user;
 };
 
-export const createSession = (user) => {
-  const sessionId = crypto.randomUUID();
-
-  sessions.set(sessionId, {
-    userId: user.id,
-    createdAt: Date.now(),
-  });
-
-  console.log("Sessions after login:", sessions.size);
-
-  return sessionId;
+export const signToken = (user) => {
+  return jwt.sign(
+    {
+      id: user.id,
+      email: user.email,
+      name: user.name,
+    },
+    getJwtSecret(),
+    { expiresIn: process.env.JWT_EXPIRES_IN || "7d" }
+  );
 };
 
-export const getSessionUser = (sessionId) => {
-  if (!sessionId) {
+export const verifyToken = (token) => {
+  if (!token) {
     return null;
   }
 
-  const session = sessions.get(sessionId);
-  console.log("Session:", session);
+  try {
+    return jwt.verify(token, getJwtSecret());
+  } catch (error) {
+    console.log("JWT verification failed:", error.message);
+    return null;
+  }
+};
 
-  if (!session) {
+export const getTokenFromRequest = (req) => {
+  const header = req.headers.authorization;
+
+  if (header?.startsWith("Bearer ")) {
+    return header.slice(7);
+  }
+
+  return getCookieValue(req, TOKEN_COOKIE);
+};
+
+export const getUserFromToken = async (token) => {
+  const payload = verifyToken(token);
+
+  if (!payload?.id) {
     return null;
   }
 
-  console.log("User ID:", session.userId);
-  console.log("Users Map Size:", users.size);
-  console.log("User from Map:", users.get(session.userId));
+  try {
+    const [rows] = await pool.query(
+      "SELECT id, google_id, name, email, profile_image FROM users WHERE id = ?",
+      [payload.id]
+    );
 
-  return users.get(session.userId) || null;
-};
+    if (rows.length === 0) {
+      console.log(`No user found in DB for id=${payload.id}`);
+      return null;
+    }
 
-export const deleteSession = (sessionId) => {
-  if (sessionId) {
-    sessions.delete(sessionId);
+    const dbUser = rows[0];
+
+    return {
+      id: dbUser.id,
+      google_id: dbUser.google_id,
+      name: dbUser.name,
+      email: dbUser.email,
+      picture: dbUser.profile_image,
+      provider: "google",
+    };
+  } catch (error) {
+    console.error("getUserFromToken error:", error.message);
+    return null;
   }
 };
 
@@ -144,22 +208,4 @@ export const getCookieValue = (req, name) => {
   return cookie ? decodeURIComponent(cookie.split("=")[1]) : null;
 };
 
-const isProduction = process.env.NODE_ENV === "production";
-
-export const setSessionCookie = (res, sessionId) => {
-  res.cookie(SESSION_COOKIE, sessionId, {
-    httpOnly: true,
-    secure: isProduction,
-    sameSite: isProduction ? "none" : "lax",
-    maxAge: SESSION_MAX_AGE_SECONDS * 1000,
-  });
-};
-export const clearSessionCookie = (res) => {
-  res.clearCookie(SESSION_COOKIE, {
-    httpOnly: true,
-    secure: isProduction,
-    sameSite: isProduction ? "none" : "lax",
-  });
-};
-
-export const SESSION_COOKIE_NAME = SESSION_COOKIE;
+export const SESSION_COOKIE_NAME = TOKEN_COOKIE;

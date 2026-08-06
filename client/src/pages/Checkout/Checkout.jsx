@@ -14,7 +14,8 @@ const Checkout = () => {
   const { user } = useAuth();
   const [clientToken, setClientToken] = useState("");
   const [instance, setInstance] = useState(null);
-  
+  const [paymentError, setPaymentError] = useState("");
+  const [paymentLoading, setPaymentLoading] = useState(false);
 
   const [address, setAddress] = useState({
   firstName: "",
@@ -130,18 +131,25 @@ const Checkout = () => {
   const dropinContainer = useRef(null);
   useEffect(() => {
     const loadToken = async () => {
-      const res = await getClientToken();
-      setClientToken(res.data.clientToken);
+      setPaymentError("");
+
+      try {
+        const res = await getClientToken();
+        setClientToken(res.data.clientToken);
+      } catch (error) {
+        console.error("Failed to fetch client token:", error);
+        setPaymentError("Unable to load payment options. Please refresh and try again.");
+      }
     };
 
     loadToken();
   }, []);
 
   useEffect(() => {
-    console.log("Client Token:", clientToken);
     if (!clientToken || !dropinContainer.current) return;
 
     let dropinInstance;
+    let isCancelled = false;
 
     dropin.create(
       {
@@ -149,8 +157,11 @@ const Checkout = () => {
         container: dropinContainer.current,
       },
       (error, createdInstance) => {
+        if (isCancelled) return;
+
         if (error) {
-          console.error(error);
+          console.error("Drop-in creation error:", error);
+          setPaymentError("Unable to load payment options. Please refresh and try again.");
           return;
         }
 
@@ -160,6 +171,7 @@ const Checkout = () => {
     );
 
     return () => {
+      isCancelled = true;
       if (dropinInstance) {
         dropinInstance.teardown();
       }
@@ -186,8 +198,21 @@ const Checkout = () => {
     return;
   }
 
+  if (paymentLoading) return;
+
   try {
-    const { nonce } = await instance.requestPaymentMethod();
+    setPaymentLoading(true);
+    setPaymentError("");
+
+    let nonce;
+    try {
+      const result = await instance.requestPaymentMethod();
+      nonce = result.nonce;
+    } catch (requestError) {
+      console.error(requestError);
+      setPaymentError("Please select a payment method before placing your order.");
+      return;
+    }
 
     const addressPayload = {
       first_name: address.firstName,
@@ -216,7 +241,6 @@ const Checkout = () => {
 
     // Create Order
     const orderRes = await createOrder({
-      user_id: 1,
       address_id: addressRes.data.addressId,
       subtotal: cart.subtotal,
       tax: cart.tax,
@@ -235,7 +259,16 @@ const Checkout = () => {
    navigate(`/order-success/${orderRes.data.orderId}`);
   } catch (error) {
     console.error(error);
-    toast.error("Something went wrong");
+
+    setPaymentError(
+      error.response?.data?.message || "Something went wrong. Please try again."
+    );
+
+    toast.error(
+      error.response?.data?.message || "Something went wrong"
+    );
+  } finally {
+    setPaymentLoading(false);
   }
 };
   return (
@@ -388,12 +421,18 @@ const Checkout = () => {
           </h2>
           <div ref={dropinContainer}></div>
 
+          {paymentError && (
+            <p className="payment-error" role="alert">
+              {paymentError}
+            </p>
+          )}
+
           <button
             className="place-order-btn"
             onClick={handlePayment}
-            disabled={!instance}
+            disabled={!instance || paymentLoading}
           >
-            Place Order
+            {paymentLoading ? "Processing..." : "Place Order"}
           </button>
         </div>
 
