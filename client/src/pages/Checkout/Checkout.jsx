@@ -26,6 +26,7 @@ const Checkout = () => {
   pincode: "",
   country: "",
 });
+  const [errors, setErrors] = useState({});
 
   // const addressRes = saveAddress({
   //   user_id: user.id,
@@ -39,6 +40,57 @@ const Checkout = () => {
   //   country: address.country,
   // });
 
+  const validateField = (name, value) => {
+    const v = (value || "").trim();
+
+    switch (name) {
+      case "firstName":
+        if (!v) return "First name is required.";
+        if (v.length < 2) return "First name must be at least 2 characters.";
+        return "";
+      case "lastName":
+        if (!v) return "Last name is required.";
+        return "";
+      case "email":
+        if (!v) return "Email is required.";
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v))
+          return "Please enter a valid email address.";
+        return "";
+      case "phone":
+        if (!v) return "Phone number is required.";
+        if (!/^\+?[\d\s-]{7,15}$/.test(v))
+          return "Please enter a valid phone number.";
+        return "";
+      case "city":
+        if (!v) return "City is required.";
+        return "";
+      case "state":
+        if (!v) return "State / Province is required.";
+        return "";
+      case "pincode":
+        if (!v) return "Postal code is required.";
+        if (!/^\d{4,10}$/.test(v))
+          return "Please enter a valid postal code.";
+        return "";
+      case "country":
+        if (!v) return "Country is required.";
+        return "";
+      default:
+        return "";
+    }
+  };
+
+  const validateAddress = (values) => {
+    const fieldErrors = {};
+
+    for (const key of Object.keys(values)) {
+      const message = validateField(key, values[key]);
+      if (message) fieldErrors[key] = message;
+    }
+
+    return fieldErrors;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -46,6 +98,31 @@ const Checkout = () => {
       ...prev,
       [name]: value,
     }));
+
+    setErrors((prev) => {
+      if (!(name in prev)) return prev;
+
+      const next = { ...prev };
+      delete next[name];
+      return next;
+    });
+  };
+
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    const message = validateField(name, value);
+
+    setErrors((prev) => {
+      const next = { ...prev };
+
+      if (message) {
+        next[name] = message;
+      } else {
+        delete next[name];
+      }
+
+      return next;
+    });
   };
 
   const navigate = useNavigate();
@@ -92,6 +169,18 @@ const Checkout = () => {
 
 
   const handlePayment = async () => {
+  const fieldErrors = validateAddress(address);
+
+  if (Object.keys(fieldErrors).length > 0) {
+    setErrors(fieldErrors);
+    toast.error("Please complete all required delivery address fields.");
+
+    const firstField = Object.keys(fieldErrors)[0];
+    const firstInput = document.querySelector(`[name="${firstField}"]`);
+    firstInput?.focus();
+    return;
+  }
+
   if (!instance) {
     toast.error("Payment UI is still loading.");
     return;
@@ -100,19 +189,7 @@ const Checkout = () => {
   try {
     const { nonce } = await instance.requestPaymentMethod();
 
-    const paymentRes = await processPayment({
-      nonce,
-      amount: cart.total,
-    });
-
-    if (!paymentRes.data.success) {
-      toast.error("Payment Failed");
-      return;
-    }
-
-    // Save Address
-    const addressRes = await saveAddress({
-      user_id:1, 
+    const addressPayload = {
       first_name: address.firstName,
       last_name: address.lastName,
       email: address.email,
@@ -121,7 +198,21 @@ const Checkout = () => {
       state: address.state,
       pincode: address.pincode,
       country: address.country,
+    };
+
+    const paymentRes = await processPayment({
+      nonce,
+      amount: cart.total,
+      address: addressPayload,
     });
+
+    if (!paymentRes.data.success) {
+      toast.error("Payment Failed");
+      return;
+    }
+
+    // Save Address
+    const addressRes = await saveAddress(addressPayload);
 
     // Create Order
     const orderRes = await createOrder({
@@ -168,47 +259,106 @@ const Checkout = () => {
             Delivery Address
           </h2>
 
-          <form className="address-form">
-            <input
-              type="text"
-              name="firstName"
-              placeholder="First Name"
-              value={address.firstName}
-              onChange={handleChange}
-            />
+          <form className="address-form" noValidate>
+            <div className="form-field">
+              <input
+                type="text"
+                name="firstName"
+                placeholder="First Name"
+                value={address.firstName}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                className={errors.firstName ? "input-error" : ""}
+                aria-invalid={Boolean(errors.firstName)}
+              />
+              {errors.firstName && (
+                <span className="field-error">{errors.firstName}</span>
+              )}
+            </div>
 
-            <input type="text" name="lastName" placeholder="Last Name" value={address.lastName}
-              onChange={handleChange} />
+            <div className="form-field">
+              <input type="text" name="lastName" placeholder="Last Name" value={address.lastName}
+                onChange={handleChange} onBlur={handleBlur}
+                className={errors.lastName ? "input-error" : ""}
+                aria-invalid={Boolean(errors.lastName)} />
+              {errors.lastName && (
+                <span className="field-error">{errors.lastName}</span>
+              )}
+            </div>
 
-            <input
-              type="email"
-              placeholder="Email"
-              name="email"
-              value={address.email}
-              onChange={handleChange}
-            />
+            <div className="form-field">
+              <input
+                type="email"
+                placeholder="Email"
+                name="email"
+                value={address.email}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                className={errors.email ? "input-error" : ""}
+                aria-invalid={Boolean(errors.email)}
+              />
+              {errors.email && (
+                <span className="field-error">{errors.email}</span>
+              )}
+            </div>
 
-            <input
-              type="tel"
-              placeholder="Phone Number"
-              name="phone"
-              value={address.phone}
-              onChange={handleChange}
-            />
+            <div className="form-field">
+              <input
+                type="tel"
+                placeholder="Phone Number"
+                name="phone"
+                value={address.phone}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                className={errors.phone ? "input-error" : ""}
+                aria-invalid={Boolean(errors.phone)}
+              />
+              {errors.phone && (
+                <span className="field-error">{errors.phone}</span>
+              )}
+            </div>
 
 
 
-            <input type="text" name="city" placeholder="City" value={address.city}
-              onChange={handleChange} />
+            <div className="form-field">
+              <input type="text" name="city" placeholder="City" value={address.city}
+                onChange={handleChange} onBlur={handleBlur}
+                className={errors.city ? "input-error" : ""}
+                aria-invalid={Boolean(errors.city)} />
+              {errors.city && (
+                <span className="field-error">{errors.city}</span>
+              )}
+            </div>
 
-            <input type="text" name="state" placeholder="State" value={address.state}
-              onChange={handleChange} />
+            <div className="form-field">
+              <input type="text" name="state" placeholder="State" value={address.state}
+                onChange={handleChange} onBlur={handleBlur}
+                className={errors.state ? "input-error" : ""}
+                aria-invalid={Boolean(errors.state)} />
+              {errors.state && (
+                <span className="field-error">{errors.state}</span>
+              )}
+            </div>
 
-            <input type="text" name="pincode" placeholder="Pincode" value={address.pincode}
-              onChange={handleChange} />
+            <div className="form-field">
+              <input type="text" name="pincode" placeholder="Pincode" value={address.pincode}
+                onChange={handleChange} onBlur={handleBlur}
+                className={errors.pincode ? "input-error" : ""}
+                aria-invalid={Boolean(errors.pincode)} />
+              {errors.pincode && (
+                <span className="field-error">{errors.pincode}</span>
+              )}
+            </div>
 
-            <input type="text" name="country" placeholder="Country" value={address.country}
-              onChange={handleChange} />
+            <div className="form-field">
+              <input type="text" name="country" placeholder="Country" value={address.country}
+                onChange={handleChange} onBlur={handleBlur}
+                className={errors.country ? "input-error" : ""}
+                aria-invalid={Boolean(errors.country)} />
+              {errors.country && (
+                <span className="field-error">{errors.country}</span>
+              )}
+            </div>
           </form>
         </div>
 
