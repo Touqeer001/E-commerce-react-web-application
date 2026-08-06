@@ -10,7 +10,7 @@ const AccountOrders = () => {
   useEffect(() => {
   const fetchOrders = async () => {
     try {
-      const res = await getOrdersByUser(1); // baad me user.id kar dena
+      const res = await getOrdersByUser();
 
       if (res.data.success) {
         setOrders(res.data.orders);
@@ -47,7 +47,7 @@ const AccountOrders = () => {
 
             return (
               <Link
-                key={order.orderId}
+                key={order.id}
                 to={`/account/orders/${order.id}`}
                 className="order-card"
               >

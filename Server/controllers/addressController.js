@@ -4,8 +4,16 @@ import { validateDeliveryAddress } from "../middleware/validateDeliveryAddress.j
 // Add Address
 export const addAddress = async (req, res) => {
   try {
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Login required",
+      });
+    }
+
     const {
-      user_id,
       first_name,
       last_name,
       email,
@@ -26,6 +34,7 @@ export const addAddress = async (req, res) => {
       pincode,
       country,
     });
+
     if (!validation.isValid) {
       return res.status(400).json({
         success: false,
@@ -39,7 +48,7 @@ export const addAddress = async (req, res) => {
       (user_id, first_name, last_name, phone, city, state, pincode, country)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
       [
-        user_id,
+        userId,
         first_name,
         last_name,
         phone,
@@ -50,28 +59,38 @@ export const addAddress = async (req, res) => {
       ]
     );
 
+    console.log(`Address created: id=${result.insertId} user_id=${userId}`);
+
     res.status(201).json({
       success: true,
       message: "Address added successfully",
       addressId: result.insertId,
     });
   } catch (error) {
-    console.error(error);
+    console.error("addAddress error:", error);
 
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Failed to add address",
+      error: error.message,
     });
   }
 };
 
-// Get Address by User
+// Get Addresses for the logged-in user
 export const getAddress = async (req, res) => {
   try {
-    const { userId } = req.params;
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Login required",
+      });
+    }
 
     const [rows] = await pool.query(
-      "SELECT * FROM addresses WHERE user_id = ?",
+      "SELECT * FROM addresses WHERE user_id = ? ORDER BY id DESC",
       [userId]
     );
 
@@ -80,16 +99,28 @@ export const getAddress = async (req, res) => {
       data: rows,
     });
   } catch (error) {
+    console.error("getAddress error:", error);
+
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Failed to fetch addresses",
+      error: error.message,
     });
   }
 };
 
-// Update Address
+// Update Address (ownership enforced)
 export const updateAddress = async (req, res) => {
   try {
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Login required",
+      });
+    }
+
     const { id } = req.params;
 
     const {
@@ -102,7 +133,7 @@ export const updateAddress = async (req, res) => {
       country,
     } = req.body;
 
-    await pool.query(
+    const [result] = await pool.query(
       `UPDATE addresses
        SET first_name = ?,
            last_name = ?,
@@ -111,7 +142,7 @@ export const updateAddress = async (req, res) => {
            state = ?,
            pincode = ?,
            country = ?
-       WHERE id = ?`,
+       WHERE id = ? AND user_id = ?`,
       [
         first_name,
         last_name,
@@ -121,36 +152,69 @@ export const updateAddress = async (req, res) => {
         pincode,
         country,
         id,
+        userId,
       ]
     );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Address not found",
+      });
+    }
 
     res.json({
       success: true,
       message: "Address updated successfully",
     });
   } catch (error) {
+    console.error("updateAddress error:", error);
+
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Failed to update address",
+      error: error.message,
     });
   }
 };
 
-// Delete Address
+// Delete Address (ownership enforced)
 export const deleteAddress = async (req, res) => {
   try {
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Login required",
+      });
+    }
+
     const { id } = req.params;
 
-    await pool.query("DELETE FROM addresses WHERE id = ?", [id]);
+    const [result] = await pool.query(
+      "DELETE FROM addresses WHERE id = ? AND user_id = ?",
+      [id, userId]
+    );
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Address not found",
+      });
+    }
 
     res.json({
       success: true,
       message: "Address deleted successfully",
     });
   } catch (error) {
+    console.error("deleteAddress error:", error);
+
     res.status(500).json({
       success: false,
-      message: error.message,
+      message: "Failed to delete address",
+      error: error.message,
     });
   }
 };

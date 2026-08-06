@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getToken, clearToken } from "./tokenService";
 
 const BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -6,6 +7,41 @@ const api = axios.create({
     baseURL: BASE_URL,
     withCredentials: true,
 });
+
+api.interceptors.request.use((config) => {
+  const token = getToken();
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+});
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      clearToken();
+
+      const url = error.config?.url || "";
+
+      if (!url.includes("/auth/me")) {
+        const isLoginPage = window.location.pathname === "/login";
+
+        if (!isLoginPage) {
+          const currentPath =
+            window.location.pathname + window.location.search;
+          window.location.assign(
+            `/login?redirect=${encodeURIComponent(currentPath)}`
+          );
+        }
+      }
+    }
+
+    return Promise.reject(error);
+  }
+);
 
 
 // 👇 NEW MockAPI instance
@@ -48,8 +84,8 @@ export const processPayment = ({ nonce, amount, address }) =>
   export const searchProducts = (query) =>
   api.get(`/search?q=${query}`);
 
-  export const getOrdersByUser = (userId) =>
-  api.get(`/orders/user/${userId}`);
+  export const getOrdersByUser = () =>
+  api.get(`/orders/user/me`);
 
 export const API_BASE_URL = BASE_URL;
 

@@ -34,7 +34,7 @@ const ProductListCard = ({ product }) => {
           <Swiper
             slidesPerView={1}
             navigation
-            loop
+            loop={(product.images?.length ?? 0) > 1}
             modules={[Navigation]}
             className="product-swiper"
           >

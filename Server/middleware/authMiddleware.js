@@ -1,22 +1,29 @@
 import {
-  getCookieValue,
-  getSessionUser,
-  SESSION_COOKIE_NAME,
+  getTokenFromRequest,
+  getUserFromToken,
 } from "../services/authService.js";
 
-export const optionalAuth = (req, res, next) => {
-  const sessionId = getCookieValue(req, SESSION_COOKIE_NAME);
-  const user = getSessionUser(sessionId);
+export const optionalAuth = async (req, res, next) => {
+  try {
+    const token = getTokenFromRequest(req);
 
-  req.sessionId = sessionId;
-  req.user = user;
+    console.log("Auth middleware - token:", token ? "present" : "missing");
+
+    req.token = token;
+    req.user = token ? await getUserFromToken(token) : null;
+
+    console.log("Auth middleware - user:", req.user ? req.user.id : "null");
+  } catch (error) {
+    console.error("Auth middleware error:", error.message);
+    req.token = undefined;
+    req.user = null;
+  }
 
   next();
 };
 
 export const requireAuth = (req, res, next) => {
   optionalAuth(req, res, () => {
-      console.log("Cookies:", req.headers.cookie);
     if (!req.user) {
       return res.status(401).json({
         success: false,
