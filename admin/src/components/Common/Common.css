@@ -10,7 +10,10 @@
   gap: 20px;
 }
 .table {
+  width: 100%;
+  max-width: 100%;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 table {
   width: 100%;
@@ -131,6 +134,13 @@ select {
 @media (max-width: 768px) {
   .grid {
     grid-template-columns: 1fr;
+  }
+  .panel {
+    width: 100%;
+    min-width: 0;
+  }
+  .table {
+    width: 100%;
   }
   .toolbar {
     display: grid;
