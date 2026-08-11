@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAdminAuth } from "../context/AdminAuthContext";
+import Button from "../components/Common/Button";
 export default function Login() {
   const {
     register,
@@ -40,9 +41,9 @@ export default function Login() {
           />
           {errors.password && <i>{errors.password.message}</i>}
         </label>
-        <button disabled={isSubmitting}>
+        <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Signing in…" : "Sign in"}
-        </button>
+        </Button>
       </form>
     </div>
   );

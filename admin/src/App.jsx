@@ -1,18 +1,16 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import Layout from "./components/Layout";
+import AdminLayout from "./components/Layout/AdminLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
-import {
-  Categories,
-  Customers,
-  Inventory,
-  Orders,
-  ProductEditor,
-  Products,
-  Profile,
-  Settings,
-} from "./pages/Management";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import Products from "./pages/Products/Products";
+import ProductEditor from "./pages/Products/ProductEditor";
+import Categories from "./pages/Categories/Categories";
+import Orders from "./pages/Orders/Orders";
+import Customers from "./pages/Customers/Customers";
+import Inventory from "./pages/Inventory/Inventory";
+import Profile from "./pages/Profile/Profile";
+import Settings from "./pages/Settings/Settings";
 export default function App() {
   return (
     <Routes>
@@ -20,7 +18,7 @@ export default function App() {
       <Route
         element={
           <ProtectedRoute>
-            <Layout />
+            <AdminLayout />
           </ProtectedRoute>
         }
       >

@@ -1,0 +1,8 @@
+.order-status-select {
+  min-width: 130px;
+  border: 1px solid #d0d5dd;
+  border-radius: 7px;
+  background: #fff;
+  color: #344054;
+  padding: 8px 10px;
+}
