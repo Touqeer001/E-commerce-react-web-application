@@ -100,6 +100,10 @@
     display: block;
     margin-right: 0;
   }
+  .shell header > div {
+    min-width: 0;
+    overflow: hidden;
+  }
   .shell aside {
     position: fixed;
     transform: translateX(-100%);
