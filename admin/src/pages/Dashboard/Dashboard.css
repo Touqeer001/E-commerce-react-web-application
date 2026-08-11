@@ -1,0 +1,4 @@
+.dashboardGrid{
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+}
